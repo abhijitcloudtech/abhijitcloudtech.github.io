@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Kids Science Question Answer Tool</title>
+<style>
+body{
+font-family:Arial;
+max-width:700px;
+margin:auto;
+padding:30px;
+}
+textarea{
+width:100%;
+height:80px;
+}
+button{
+padding:10px 20px;
+margin-top:10px;
+}
+#answer{
+margin-top:20px;
+background:#f5f5f5;
+padding:15px;
+border-radius:6px;
+}
+</style>
+</head>
+
+<body>
+
+<h2>Kids Science Question Answer Tool</h2>
+
+<p>Ask any science question a kid might ask.</p>
+
+<textarea id="question" placeholder="Why is the sky blue?"></textarea>
+
+<br>
+
+<button onclick="askQuestion()">Explain to Kid</button>
+
+<div id="answer"></div>
+
+<script>
+
+async function askQuestion(){
+
+let question=document.getElementById("question").value;
+
+document.getElementById("answer").innerHTML="Thinking...";
+
+let response=await fetch("https://YOUR_WORKER_URL.workers.dev/",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+question:question
+})
+});
+
+let data=await response.json();
+
+document.getElementById("answer").innerHTML=data.answer;
+
+}
+
+</script>
+
+</body>
+</html>
