@@ -1,45 +1,84 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Tools</title>
-<link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Tools | AJ CloudTech</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
 
-<nav class="navbar">
-<div class="logo">AJ Cloud Tech</div>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">AJ <span class="highlight">CloudTech</span></a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/tools.html" class="active">Tools</a></li>
+                <li><a href="/blog.html">Blog</a></li>
+                <li><a href="/youtube.html">YouTube</a></li>
+                <li><a href="/projects.html">Projects</a></li>
+                <li><a href="/contact.html">Contact</a></li>
+                <li><a href="/admin.html" class="admin-btn"><i class="fas fa-lock"></i> Admin</a></li>
+            </ul>
+            <div class="hamburger"><i class="fas fa-bars"></i></div>
+        </div>
+    </nav>
 
-<ul class="nav-links">
-<li><a href="/">Home</a></li>
-<li><a href="/tools.html">Tools</a></li>
-<li><a href="/blog.html">Blog</a></li>
-<li><a href="/youtube.html">YouTube</a></li>
-<li><a href="/projects.html">Projects</a></li>
-<li><a href="/contact.html">Contact</a></li>
-<li><a href="/admin.html">Admin</a></li>
-</ul>
-</nav>
+    <header class="hero">
+        <div class="hero-content">
+            <span class="badge">Live & Edge Tools</span>
+            <h1>My AI <span class="gradient-text">ToolHub</span></h1>
+            <p>A suite of AI-powered utilities built with Python, LLMs, and FFmpeg.</p>
+        </div>
+    </header>
 
-<section class="hero">
-<h1>My AI Tools</h1>
-</section>
+    <main class="container">
+        <section class="grid" style="margin-top: 40px;">
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-rss"></i></div>
+                <h3>Podcast RSS Generator</h3>
+                <p>Create and manage podcast RSS feeds effortlessly.</p>
+                <span style="font-size: 0.8rem; background: #e2e8f0; padding: 2px 8px; border-radius: 4px; margin-bottom: 10px; display: inline-block;">GCP Hosted</span>
+                <br>
+                <a href="https://tools.ajcloudtech.in" class="btn btn-primary" style="margin-top: 15px;">Launch Tool</a>
+            </div>
 
-<section class="grid">
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-envelope-open-text"></i></div>
+                <h3>Automated Cold Emailer</h3>
+                <p>Upload your CV and a job description to generate a perfect cold email using AI.</p>
+                <span style="font-size: 0.8rem; background: #e2e8f0; padding: 2px 8px; border-radius: 4px; margin-bottom: 10px; display: inline-block;">Coming Soon</span>
+                <br>
+                <a href="#" class="btn btn-secondary" style="margin-top: 15px; opacity: 0.5;">In Development</a>
+            </div>
 
-<div class="card">
-<h3>Image Background Remover</h3>
-<p>Remove image background instantly.</p>
-<a href="#">Open Tool</a>
-</div>
+             <div class="card">
+                <div class="card-icon"><i class="fas fa-file-contract"></i></div>
+                <h3>Brutal AI CV Roaster</h3>
+                <p>Get brutal, honest feedback on your resume from an AI tech recruiter.</p>
+                <span style="font-size: 0.8rem; background: #e2e8f0; padding: 2px 8px; border-radius: 4px; margin-bottom: 10px; display: inline-block;">Coming Soon</span>
+                <br>
+                <a href="#" class="btn btn-secondary" style="margin-top: 15px; opacity: 0.5;">In Development</a>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-star-and-crescent"></i></div>
+                <h3>Astro App</h3>
+                <p>AI-powered astrological insights based on your birth details.</p>
+                <span style="font-size: 0.8rem; background: #e2e8f0; padding: 2px 8px; border-radius: 4px; margin-bottom: 10px; display: inline-block;">Coming Soon</span>
+                <br>
+                <a href="#" class="btn btn-secondary" style="margin-top: 15px; opacity: 0.5;">In Development</a>
+            </div>
+        </section>
+    </main>
 
-<div class="card">
-<h3>AI Activity Generator</h3>
-<p>Generate kid learning activities.</p>
-<a href="#">Open Tool</a>
-</div>
-
-</section>
-
+    <footer>
+        <div class="footer-content">
+            <p>© 2026 AJ CloudTech.</p>
+        </div>
+    </footer>
+    <script src="js/script.js"></script>
 </body>
 </html>
