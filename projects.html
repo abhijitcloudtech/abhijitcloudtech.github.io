@@ -1,62 +1,76 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Projects - AJ Cloud Tech</title>
-<link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects | AJ CloudTech</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
 
-<nav class="navbar">
-<div class="logo">AJ Cloud Tech</div>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">AJ <span class="highlight">CloudTech</span></a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/tools.html">Tools</a></li>
+                <li><a href="/blog.html">Blog</a></li>
+                <li><a href="/youtube.html">YouTube</a></li>
+                <li><a href="/projects.html" class="active">Projects</a></li>
+                <li><a href="/contact.html">Contact</a></li>
+                <li><a href="/admin.html" class="admin-btn"><i class="fas fa-lock"></i> Admin</a></li>
+            </ul>
+            <div class="hamburger"><i class="fas fa-bars"></i></div>
+        </div>
+    </nav>
 
-<ul class="nav-links">
-<li><a href="/">Home</a></li>
-<li><a href="/tools.html">Tools</a></li>
-<li><a href="/blog.html">Blog</a></li>
-<li><a href="/youtube.html">YouTube</a></li>
-<li><a href="/projects.html">Projects</a></li>
-<li><a href="/contact.html">Contact</a></li>
-<li><a href="/admin.html">Admin</a></li>
-</ul>
-</nav>
+    <header class="hero">
+        <div class="hero-content">
+            <span class="badge">Local Architecture</span>
+            <h1>Architecture & <span class="gradient-text">Pipelines</span></h1>
+            <p>Deep dives into my private infrastructure, video processing engines, and local AI servers.</p>
+        </div>
+    </header>
 
-<section class="hero">
-<h1>My Projects</h1>
-<p>Experiments with AI, Automation and Cloud</p>
-</section>
+    <main class="container">
+        <section class="grid" style="margin-top: 40px;">
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-video"></i></div>
+                <h3>AI Video Engine</h3>
+                <p>Generates daily tasks using LLMs, writes scripts, and compiles simple videos using FFmpeg.</p>
+                <span style="font-size: 0.8rem; background: #e2e8f0; padding: 2px 8px; border-radius: 4px; margin-bottom: 10px; display: inline-block;">Local Edge Server</span>
+            </div>
 
-<section class="grid">
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-film"></i></div>
+                <h3>Pixar-Style Video Generator</h3>
+                <p>Merges short clips, applies watermarks, and syncs AI-separated audio tracks seamlessly.</p>
+                <span style="font-size: 0.8rem; background: #e2e8f0; padding: 2px 8px; border-radius: 4px; margin-bottom: 10px; display: inline-block;">Local Edge Server</span>
+            </div>
 
-<div class="card">
-<h3>AI Activity Generator</h3>
-<p>Generate learning activities for kids using AI and images.</p>
-<a href="#">View Project</a>
-</div>
+            <div class="card">
+                <div class="card-icon"><i class="fab fa-youtube"></i></div>
+                <h3>YouTube Studio Automator</h3>
+                <p>Generates full YouTube metadata from raw video files using local LLMs and SQLite storage.</p>
+                <span style="font-size: 0.8rem; background: #e2e8f0; padding: 2px 8px; border-radius: 4px; margin-bottom: 10px; display: inline-block;">Local Edge Server</span>
+            </div>
+             
+             <div class="card">
+                <div class="card-icon"><i class="fas fa-server"></i></div>
+                <h3>Tailscale FileHub</h3>
+                <p>Secure, private file storage system handling uploads and database records for all local tools.</p>
+                <span style="font-size: 0.8rem; background: #e2e8f0; padding: 2px 8px; border-radius: 4px; margin-bottom: 10px; display: inline-block;">Local Edge Server</span>
+            </div>
+        </section>
+    </main>
 
-<div class="card">
-<h3>Image Background Remover</h3>
-<p>Remove image backgrounds using AI deployed on GCP.</p>
-<a href="#">View Project</a>
-</div>
-
-<div class="card">
-<h3>Stock Analysis Tool</h3>
-<p>Python tool to analyze Indian stocks for long-term investment.</p>
-<a href="#">View Project</a>
-</div>
-
-<div class="card">
-<h3>Daily Routine Generator</h3>
-<p>AI generated daily routine for kids with images.</p>
-<a href="#">View Project</a>
-</div>
-
-</section>
-
-<footer>
-<p>© 2026 AJ Cloud Tech</p>
-</footer>
-
+    <footer>
+        <div class="footer-content">
+            <p>© 2026 AJ CloudTech.</p>
+        </div>
+    </footer>
+    <script src="js/script.js"></script>
 </body>
 </html>
