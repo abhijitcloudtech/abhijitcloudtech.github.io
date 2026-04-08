@@ -1,62 +1,95 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>AJ Cloud Tech</title>
-<link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJ CloudTech | AI Tools & Automation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
 
-<nav class="navbar">
-<div class="logo">AJ Cloud Tech</div>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">AJ <span class="highlight">CloudTech</span></a>
+            
+            <ul class="nav-links">
+                <li><a href="/" class="active">Home</a></li>
+                <li><a href="/tools.html">Tools</a></li>
+                <li><a href="/blog.html">Blog</a></li>
+                <li><a href="/youtube.html">YouTube</a></li>
+                <li><a href="/projects.html">Projects</a></li>
+                <li><a href="/contact.html">Contact</a></li>
+                <li><a href="/admin.html" class="admin-btn"><i class="fas fa-lock"></i> Admin</a></li>
+            </ul>
 
-<ul class="nav-links">
-<li><a href="/">Home</a></li>
-<li><a href="/tools.html">Tools</a></li>
-<li><a href="/blog.html">Blog</a></li>
-<li><a href="/youtube.html">YouTube</a></li>
-<li><a href="/projects.html">Projects</a></li>
-<li><a href="/contact.html">Contact</a></li>
-<li><a href="/admin.html">Admin</a></li>
-</ul>
-</nav>
+            <div class="hamburger">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
 
-<section class="hero">
-<h1>AI Tools & Cloud Experiments</h1>
-<p>Automation, AI Tools, Blogs & Projects by Abhijit</p>
-</section>
+    <header class="hero">
+        <div class="hero-content">
+            <span class="badge">Building the Future</span>
+            <h1>AI Tools & Cloud <br><span class="gradient-text">Experiments</span></h1>
+            <p>Welcome to my digital lab. I build automated workflows, develop AI-powered tools, and document my cloud journey.</p>
+            <div class="hero-buttons">
+                <a href="/tools.html" class="btn btn-primary">Explore Tools <i class="fas fa-arrow-right"></i></a>
+                <a href="/blog.html" class="btn btn-secondary">Read Daily Blog</a>
+            </div>
+        </div>
+    </header>
 
-<section class="grid">
+    <main class="container">
+        <div class="section-header">
+            <h2>The Ecosystem</h2>
+            <p>Everything running under the AJ CloudTech umbrella.</p>
+        </div>
 
-<div class="card">
-<h3>AI Tools</h3>
-<p>Collection of tools built using AI and cloud.</p>
-<a href="/tools.html">Explore →</a>
-</div>
+        <section class="grid">
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-robot"></i></div>
+                <h3>AI Tools</h3>
+                <p>A collection of specialized AI applications, from CV analyzers to video engines.</p>
+                <a href="/tools.html" class="card-link">Launch Hub →</a>
+            </div>
 
-<div class="card">
-<h3>Daily Blog</h3>
-<p>AI automation blogs and experiments.</p>
-<a href="/blog.html">Read →</a>
-</div>
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-pen-nib"></i></div>
+                <h3>Daily Blog</h3>
+                <p>Automated insights, trending tech updates, and experiments in automation.</p>
+                <a href="/blog.html" class="card-link">Read Posts →</a>
+            </div>
 
-<div class="card">
-<h3>YouTube</h3>
-<p>AI learning and experiments.</p>
-<a href="/youtube.html">Watch →</a>
-</div>
+            <div class="card">
+                <div class="card-icon"><i class="fab fa-youtube"></i></div>
+                <h3>YouTube</h3>
+                <p>Deep dives into AI learning, automation tutorials, and tech experiments.</p>
+                <a href="/youtube.html" class="card-link">Watch Videos →</a>
+            </div>
 
-<div class="card">
-<h3>Projects</h3>
-<p>Open source projects and learning journey.</p>
-<a href="/projects.html">Explore →</a>
-</div>
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-code-branch"></i></div>
+                <h3>Projects</h3>
+                <p>My open-source contributions, local architecture, and learning journey.</p>
+                <a href="/projects.html" class="card-link">View Repo →</a>
+            </div>
+        </section>
+    </main>
 
-</section>
+    <footer>
+        <div class="footer-content">
+            <div class="social-links">
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+            </div>
+            <p>© 2026 AJ CloudTech.</p>
+        </div>
+    </footer>
 
-<footer>
-<p>© 2026 AJ Cloud Tech</p>
-</footer>
-
+    <script src="js/script.js"></script>
 </body>
 </html>
