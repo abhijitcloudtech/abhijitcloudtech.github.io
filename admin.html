@@ -66,7 +66,7 @@
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-value" id="stat-users">0</div>
-                    <div class="stat-label">Unique Users</div>
+                    <div class="stat-label">Total Endpoints</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-value" id="stat-usage">0</div>
@@ -78,36 +78,58 @@
                 </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start; margin-bottom: 30px;">
                 
                 <div class="card">
-                    <h3 style="margin-bottom: 20px;">Usage Distribution</h3>
+                    <h3 style="margin-bottom: 20px;">Usage by Tool</h3>
                     <canvas id="usageChart"></canvas>
                 </div>
 
                 <div class="card" style="padding: 0; overflow: hidden;">
-                    <h3 style="padding: 20px 20px 10px;">Top Users (Dads Whypedia)</h3>
+                    <h3 style="padding: 20px 20px 10px;">Top Users</h3>
                     <div style="max-height: 400px; overflow-y: auto;">
                         <table class="data-table">
                             <thead>
                                 <tr>
                                     <th>Email / IP</th>
-                                    <th>Generations</th>
+                                    <th>Tool</th>
+                                    <th>Count</th>
                                     <th>Last Seen</th>
                                 </tr>
                             </thead>
                             <tbody id="userTableBody">
-                                </tbody>
+                            </tbody>
                         </table>
                     </div>
                 </div>
-
             </div>
+
+            <div class="card" style="padding: 0; overflow: hidden;">
+                <h3 style="padding: 20px 20px 10px;"><i class="fas fa-question-circle" style="color: var(--primary);"></i> User "Why" Questions Bank</h3>
+                <div style="max-height: 400px; overflow-y: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Question Asked</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody id="questionsTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
         </div>
 
     </main>
 
     <script>
+        // Allow pressing Enter to login
+        document.getElementById('adminPassword').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') document.getElementById('loginBtn').click();
+        });
+
         document.getElementById('loginBtn').addEventListener('click', async () => {
             const password = document.getElementById('adminPassword').value;
             const loginBtn = document.getElementById('loginBtn');
@@ -141,28 +163,56 @@
                 document.getElementById('stat-usage').innerText = data.metrics.totalUsage;
                 document.getElementById('stat-emails').innerText = data.metrics.emailsCollected;
 
-                // Populate Table
-                const tableBody = document.getElementById('userTableBody');
+                // Populate User Table
+                const userTableBody = document.getElementById('userTableBody');
                 data.users.forEach(user => {
-                    const identifier = user.email ? `<span style="color: var(--primary); font-weight: 600;">${user.email}</span>` : `<span style="color: var(--text-muted); font-size: 0.85rem;">IP: ${user.ip.substring(0,8)}...</span>`;
-                    tableBody.innerHTML += `
+                    const identifier = (user.email && user.email !== 'anonymous') ? `<span style="color: var(--primary); font-weight: 600;">${user.email}</span>` : `<span style="color: var(--text-muted); font-size: 0.85rem;">IP: ${user.ip.substring(0,12)}...</span>`;
+                    userTableBody.innerHTML += `
                         <tr>
                             <td>${identifier}</td>
+                            <td style="font-size: 0.85rem;">${user.toolname}</td>
                             <td><span style="background: #e2e8f0; padding: 2px 8px; border-radius: 20px; font-size: 0.85rem; font-weight: bold;">${user.usage_count}</span></td>
                             <td style="font-size: 0.85rem; color: var(--text-muted);">${user.last_used}</td>
                         </tr>
                     `;
                 });
 
-                // Draw Chart
+                // Populate Questions Table
+                const questionsTableBody = document.getElementById('questionsTableBody');
+                if (data.questions && data.questions.length > 0) {
+                    data.questions.forEach(q => {
+                        questionsTableBody.innerHTML += `
+                            <tr>
+                                <td style="font-weight: 600;">"${q.why_question}"</td>
+                                <td style="font-size: 0.85rem; color: var(--text-muted);">${q.email}</td>
+                            </tr>
+                        `;
+                    });
+                } else {
+                    questionsTableBody.innerHTML = `<tr><td colspan="2" style="text-align:center; color: var(--text-muted);">No questions recorded yet.</td></tr>`;
+                }
+
+                // Dynamic Chart Processing
+                const toolNames = Object.keys(data.toolData);
+                const toolUsageCounts = Object.values(data.toolData);
+                
+                // Fallback if empty
+                if(toolNames.length === 0) {
+                    toolNames.push('No Data');
+                    toolUsageCounts.push(1);
+                }
+
+                // Vibrant colors for the chart
+                const chartColors = ['#7c3aed', '#4a6cf7', '#ec4899', '#10b981', '#f59e0b'];
+
                 const ctx = document.getElementById('usageChart').getContext('2d');
                 new Chart(ctx, {
                     type: 'doughnut',
                     data: {
-                        labels: ['Dads Whypedia', 'Podcast Generator (Static)', 'Other Tools'],
+                        labels: toolNames,
                         datasets: [{
-                            data: [data.metrics.totalUsage, 0, 0], // Currently only tracking Dads Whypedia in DB
-                            backgroundColor: ['#7c3aed', '#4a6cf7', '#e2e8f0'],
+                            data: toolUsageCounts,
+                            backgroundColor: chartColors.slice(0, toolNames.length),
                             borderWidth: 0
                         }]
                     },
