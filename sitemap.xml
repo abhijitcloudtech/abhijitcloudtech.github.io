@@ -28,4 +28,8 @@
     <loc>https://ajcloudtech.in/admin.html</loc>
     <priority>0.4</priority>
   </url>
+  <url>
+    <loc>https://ajcloudtech.in/dads-whypedia.html</loc>
+    <priority>0.8</priority>
+  </url>
 </urlset>
