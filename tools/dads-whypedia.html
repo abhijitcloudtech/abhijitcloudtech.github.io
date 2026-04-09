@@ -89,7 +89,13 @@
                 emailGroup.style.display = 'none';
             }
         });
-
+        // Allow pressing "Enter" to trigger the generation
+        document.getElementById('questionInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                document.getElementById('generateBtn').click();
+            }
+        });
         // Handle Generation
         document.getElementById('generateBtn').addEventListener('click', async () => {
             const question = document.getElementById('questionInput').value;
@@ -122,7 +128,8 @@
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ 
                         question: question,
-                        email: finalEmail
+                        email: finalEmail,
+                        toolname: "DadsWhypedia"
                     })
                 });
 
