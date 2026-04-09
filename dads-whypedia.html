@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dads Whypedia Generator | AJ CloudTech</title>
+    <link rel="canonical" href="https://ajcloudtech.in/dads-whypedia.html">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .tool-container { max-width: 700px; margin: 40px auto; }
+        .input-box { width: 100%; padding: 15px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 1rem; margin-bottom: 20px; font-family: 'Inter', sans-serif;}
+        .input-box:focus { border-color: var(--primary); outline: none; }
+        .result-box { background: #f8fafc; padding: 25px; border-radius: 8px; margin-top: 30px; border: 1px solid #e2e8f0; display: none; white-space: pre-wrap; font-size: 1.05rem; line-height: 1.8;}
+        .loader { display: none; text-align: center; margin-top: 20px; color: var(--primary); font-weight: bold;}
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">AJ <span class="highlight">CloudTech</span></a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/tools.html" class="active">Tools</a></li>
+                <li><a href="/blog.html">Blog</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="hero" style="padding: 60px 20px;">
+        <div class="hero-content">
+            <span class="badge">Powered by Llama-3 AI</span>
+            <h1>Dads <span class="gradient-text">Whypedia</span></h1>
+            <p>Generate fun, educational scripts to answer your kid's toughest "Why?" questions.</p>
+        </div>
+    </header>
+
+    <main class="container tool-container">
+        <div class="card">
+            <h3 style="margin-bottom: 15px;">Ask the Dad AI</h3>
+            <input type="text" id="questionInput" class="input-box" placeholder="e.g., Why is the sky blue?">
+            <button id="generateBtn" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                Generate Script <i class="fas fa-magic"></i>
+            </button>
+
+            <div id="loader" class="loader"><i class="fas fa-spinner fa-spin"></i> Dad is thinking...</div>
+            
+            <div id="resultBox" class="result-box"></div>
+        </div>
+    </main>
+
+    <script>
+        document.getElementById('generateBtn').addEventListener('click', async () => {
+            const question = document.getElementById('questionInput').value;
+            const resultBox = document.getElementById('resultBox');
+            const loader = document.getElementById('loader');
+            const btn = document.getElementById('generateBtn');
+
+            if (!question) return alert("Please enter a question!");
+
+            // UI Loading state
+            btn.style.display = 'none';
+            loader.style.display = 'block';
+            resultBox.style.display = 'none';
+
+            try {
+                // REPLACE THIS URL with your Cloudflare Worker URL
+                const WORKER_URL = "https://https://dads-whypedia-api.abhijit-cloudtech.workers.dev"; 
+                
+                const response = await fetch(WORKER_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ question: question })
+                });
+
+                const data = await response.json();
+
+                if(data.error) throw new Error(data.error);
+
+                resultBox.innerText = data.result;
+                resultBox.style.display = 'block';
+
+            } catch (error) {
+                alert("Error generating script: " + error.message);
+            } finally {
+                // Reset UI
+                btn.style.display = 'flex';
+                loader.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
