@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        .admin-container { max-width: 1000px; margin: 40px auto; }
+        .admin-container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
         .login-box { max-width: 400px; margin: 80px auto; text-align: center; }
         .input-box { width: 100%; padding: 15px; border: 2px solid #e2e8f0; border-radius: 8px; margin-bottom: 20px; font-family: 'Inter'; }
         
@@ -76,6 +76,14 @@
                     <div class="stat-value" id="stat-emails">0</div>
                     <div class="stat-label">Emails Collected</div>
                 </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-roasts" style="color: #ef4444;">0</div>
+                    <div class="stat-label">Total Roasts</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-shares" style="color: #0A66C2;">0</div>
+                    <div class="stat-label">LinkedIn Shares</div>
+                </div>
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start; margin-bottom: 30px;">
@@ -104,7 +112,7 @@
                 </div>
             </div>
 
-            <div class="card" style="padding: 0; overflow: hidden;">
+            <div class="card" style="padding: 0; overflow: hidden; margin-bottom: 30px;">
                 <h3 style="padding: 20px 20px 10px;"><i class="fas fa-question-circle" style="color: var(--primary);"></i> User "Why" Questions Bank</h3>
                 <div style="max-height: 400px; overflow-y: auto;">
                     <table class="data-table">
@@ -120,111 +128,31 @@
                 </div>
             </div>
 
+            <div class="card" style="padding: 0; overflow: hidden; margin-bottom: 50px;">
+                <h3 style="padding: 20px 20px 10px;"><i class="fas fa-fire" style="color: #ef4444;"></i> Recent AI CV Roasts</h3>
+                <div style="max-height: 500px; overflow-y: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 15%;">Date</th>
+                                <th style="width: 10%;">Input Size</th>
+                                <th style="width: 65%;">The AI Roast Output</th>
+                                <th style="width: 10%; text-align: center;">Shared?</th>
+                            </tr>
+                        </thead>
+                        <tbody id="roastsTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
         </div>
 
     </main>
 
     <script>
-        // Allow pressing Enter to login
         document.getElementById('adminPassword').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') document.getElementById('loginBtn').click();
         });
 
-        document.getElementById('loginBtn').addEventListener('click', async () => {
-            const password = document.getElementById('adminPassword').value;
-            const loginBtn = document.getElementById('loginBtn');
-            const errorBox = document.getElementById('loginError');
-            
-            if(!password) return;
-
-            loginBtn.innerText = "Authenticating...";
-            errorBox.style.display = 'none';
-
-            try {
-                // REPLACE WITH YOUR NEW ADMIN WORKER URL
-                const ADMIN_API_URL = "https://toolhub-admin-api.abhijit-cloudtech.workers.dev";
-                
-                const response = await fetch(ADMIN_API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ password: password })
-                });
-
-                const data = await response.json();
-
-                if (!response.ok) throw new Error(data.error || "Authentication failed");
-
-                // SUCCESS: Hide Login, Show Dashboard
-                document.getElementById('loginSection').style.display = 'none';
-                document.getElementById('dashboardSection').style.display = 'block';
-
-                // Populate Stats
-                document.getElementById('stat-users').innerText = data.metrics.totalUsers;
-                document.getElementById('stat-usage').innerText = data.metrics.totalUsage;
-                document.getElementById('stat-emails').innerText = data.metrics.emailsCollected;
-
-                // Populate User Table
-                const userTableBody = document.getElementById('userTableBody');
-                data.users.forEach(user => {
-                    const identifier = (user.email && user.email !== 'anonymous') ? `<span style="color: var(--primary); font-weight: 600;">${user.email}</span>` : `<span style="color: var(--text-muted); font-size: 0.85rem;">IP: ${user.ip.substring(0,12)}...</span>`;
-                    userTableBody.innerHTML += `
-                        <tr>
-                            <td>${identifier}</td>
-                            <td style="font-size: 0.85rem;">${user.toolname}</td>
-                            <td><span style="background: #e2e8f0; padding: 2px 8px; border-radius: 20px; font-size: 0.85rem; font-weight: bold;">${user.usage_count}</span></td>
-                            <td style="font-size: 0.85rem; color: var(--text-muted);">${user.last_used}</td>
-                        </tr>
-                    `;
-                });
-
-                // Populate Questions Table
-                const questionsTableBody = document.getElementById('questionsTableBody');
-                if (data.questions && data.questions.length > 0) {
-                    data.questions.forEach(q => {
-                        questionsTableBody.innerHTML += `
-                            <tr>
-                                <td style="font-weight: 600;">"${q.why_question}"</td>
-                                <td style="font-size: 0.85rem; color: var(--text-muted);">${q.email}</td>
-                            </tr>
-                        `;
-                    });
-                } else {
-                    questionsTableBody.innerHTML = `<tr><td colspan="2" style="text-align:center; color: var(--text-muted);">No questions recorded yet.</td></tr>`;
-                }
-
-                // Dynamic Chart Processing
-                const toolNames = Object.keys(data.toolData);
-                const toolUsageCounts = Object.values(data.toolData);
-                
-                // Fallback if empty
-                if(toolNames.length === 0) {
-                    toolNames.push('No Data');
-                    toolUsageCounts.push(1);
-                }
-
-                // Vibrant colors for the chart
-                const chartColors = ['#7c3aed', '#4a6cf7', '#ec4899', '#10b981', '#f59e0b'];
-
-                const ctx = document.getElementById('usageChart').getContext('2d');
-                new Chart(ctx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: toolNames,
-                        datasets: [{
-                            data: toolUsageCounts,
-                            backgroundColor: chartColors.slice(0, toolNames.length),
-                            borderWidth: 0
-                        }]
-                    },
-                    options: { responsive: true, cutout: '70%' }
-                });
-
-            } catch (error) {
-                errorBox.innerText = error.message;
-                errorBox.style.display = 'block';
-                loginBtn.innerText = "Login to Dashboard";
-            }
-        });
-    </script>
-</body>
-</html>
+        document.getElementById('loginBtn').addEventListener
