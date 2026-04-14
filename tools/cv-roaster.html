@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brutal AI CV Roaster | AJ CloudTech</title>
+    
+    <link rel="canonical" href="https://ajcloudtech.in/tools/cv-roaster.html">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // This prevents Tailwind from breaking your global style.css!
+        tailwind.config = {
+            corePlugins: { preflight: false },
+            theme: { extend: { colors: { gray: { 900: '#111827', 800: '#1f2937', 700: '#374151' } } } }
+        }
+    </script>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">AJ <span class="highlight">CloudTech</span></a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/tools.html" class="active">Tools</a></li>
+                <li><a href="/blog.html">Blog</a></li>
+                <li><a href="/youtube.html">YouTube</a></li>
+                <li><a href="/projects.html">Projects</a></li>
+                <li><a href="/contact.html">Contact</a></li>
+                <li><a href="/admin.html" class="admin-btn"><i class="fas fa-lock"></i> Admin</a></li>
+            </ul>
+            <div class="hamburger"><i class="fas fa-bars"></i></div>
+        </div>
+    </nav>
+
+    <main class="container" style="margin-top: 40px; margin-bottom: 80px; min-height: 70vh;">
+        
+        <div class="tw-wrapper flex flex-col items-center">
+            <div class="max-w-2xl w-full text-center space-y-4 mb-8">
+                <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400 pb-2">
+                    The Brutal AI CV Roaster
+                </h1>
+                <p class="text-gray-600 text-lg">
+                    Paste your resume or LinkedIn "About" section below. Our elite Silicon Valley AI recruiter will destroy your ego, then give you one piece of actual advice.
+                </p>
+                
+                <div class="inline-flex items-center gap-2 bg-gray-100 border border-gray-300 rounded-full px-4 py-1.5 text-sm font-medium text-gray-700 shadow-sm mt-4">
+                    🔥 <span id="stats-counter" class="font-bold">0</span> Egos Destroyed Today
+                </div>
+            </div>
+
+            <div class="max-w-2xl w-full bg-gray-900 rounded-2xl p-6 shadow-2xl border border-gray-800">
+                <textarea id="resume-input" rows="8" 
+                    class="w-full bg-gray-800 text-gray-200 border border-gray-700 rounded-xl p-4 focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition-all resize-none mb-4 placeholder-gray-500 font-sans text-base"
+                    placeholder="Paste your resume, LinkedIn bio, or cover letter here..."></textarea>
+                
+                <button id="roast-btn" onclick="generateRoast()" 
+                    class="w-full bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-500 hover:to-orange-400 text-white font-bold py-4 px-6 rounded-xl transition-transform transform hover:scale-[1.02] active:scale-95 shadow-lg flex justify-center items-center gap-2 text-lg border-none cursor-pointer">
+                    <span id="btn-text">🔥 Roast Me</span>
+                    <svg id="loading-spinner" class="animate-spin h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                </button>
+                <p id="error-msg" class="text-red-400 text-sm mt-3 text-center hidden"></p>
+            </div>
+
+            <div id="result-container" class="max-w-2xl w-full mt-8 hidden animate-fade-in-up">
+                <div class="bg-gray-900 rounded-2xl p-6 md:p-8 shadow-2xl border border-gray-700 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-500 to-orange-500"></div>
+                    
+                    <h3 class="text-xl font-bold text-gray-100 mb-4 flex items-center gap-2">
+                        🤖 The Verdict:
+                    </h3>
+                    
+                    <div id="roast-output" class="text-gray-300 space-y-4 leading-relaxed text-base font-sans">
+                        </div>
+
+                    <div class="mt-8 pt-6 border-t border-gray-800 flex flex-col items-center gap-3">
+                        <p class="text-sm text-gray-400">If you survived, prove it.</p>
+                        <button onclick="shareToLinkedIn()" 
+                            class="w-full md:w-auto bg-[#0A66C2] hover:bg-[#004182] text-white font-bold py-3 px-8 rounded-lg transition-colors flex items-center justify-center gap-2 shadow-lg border-none cursor-pointer">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                            Share to LinkedIn
+                        </button>
+                        <p id="share-hint" class="text-xs text-green-400 hidden mt-2">✅ Post text copied to clipboard! Opening LinkedIn...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>© 2026 AJ CloudTech.</p>
+        </div>
+    </footer>
+
+    <script src="/js/script.js"></script>
+
+    <script>
+        // 🔴🔴🔴 YOUR CLOUDFLARE WORKER URL GOES HERE 🔴🔴🔴
+        const API_BASE_URL = "https://cv-roaster-api.YOUR-SUBDOMAIN.workers.dev";
+        
+        let currentRoastId = null;
+
+        // Auto-fetch stats on page load
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/stats`);
+                const data = await res.json();
+                document.getElementById('stats-counter').innerText = data.total_roasts.toLocaleString();
+            } catch (e) {
+                console.log("Stats API waking up...");
+            }
+        });
+
+        async function generateRoast() {
+            const input = document.getElementById('resume-input').value.trim();
+            const btn = document.getElementById('roast-btn');
+            const btnText = document.getElementById('btn-text');
+            const spinner = document.getElementById('loading-spinner');
+            const errorMsg = document.getElementById('error-msg');
+            const resultContainer = document.getElementById('result-container');
+            const roastOutput = document.getElementById('roast-output');
+
+            if (input.length < 50) {
+                errorMsg.innerText = "Error: Paste a bit more than that, don't be lazy.";
+                errorMsg.classList.remove('hidden');
+                return;
+            }
+
+            // UI Loading State
+            errorMsg.classList.add('hidden');
+            resultContainer.classList.add('hidden');
+            btn.disabled = true;
+            btn.classList.add('opacity-70', 'cursor-not-allowed');
+            btnText.innerText = "Analyzing Garbage...";
+            spinner.classList.remove('hidden');
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/roast`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ resume_text: input })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) throw new Error(data.error || "Server failed.");
+
+                currentRoastId = data.id;
+                
+                // Format the text with proper HTML paragraphs
+                const formattedText = data.roast.split('\n').filter(p => p.trim() !== '').map(p => {
+                    if (p.includes('ACTUAL ADVICE:')) return `<div class="mt-6 p-4 bg-gray-800 border border-green-900/50 rounded-xl"><strong class="text-green-400">ACTUAL ADVICE:</strong> ${p.replace('ACTUAL ADVICE:', '')}</div>`;
+                    return `<p class="mb-4">${p}</p>`;
+                }).join('');
+
+                roastOutput.innerHTML = formattedText;
+                
+                // Show Results
+                resultContainer.classList.remove('hidden');
+                resultContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                // Update counter locally
+                const counter = document.getElementById('stats-counter');
+                counter.innerText = (parseInt(counter.innerText.replace(/,/g, '')) + 1).toLocaleString();
+
+            } catch (error) {
+                errorMsg.innerText = error.message;
+                errorMsg.classList.remove('hidden');
+            } finally {
+                // Reset UI
+                btn.disabled = false;
+                btn.classList.remove('opacity-70', 'cursor-not-allowed');
+                btnText.innerText = "🔥 Roast Me Again";
+                spinner.classList.add('hidden');
+            }
+        }
+
+        async function shareToLinkedIn() {
+            const hint = document.getElementById('share-hint');
+            const shareText = `I just got my resume absolutely destroyed by an AI Tech Recruiter. It's brutal, but the actual advice at the end was shockingly accurate. \n\nIf you think your CV is bulletproof, try the AI CV Roaster here: ${window.location.href} \n\n#Career #Tech #AI #ResumeRoast`;
+
+            navigator.clipboard.writeText(shareText).then(() => {
+                hint.classList.remove('hidden');
+                if (currentRoastId) {
+                    fetch(`${API_BASE_URL}/api/share`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id: currentRoastId })
+                    }).catch(e => console.log("Share tracking failed."));
+                }
+                setTimeout(() => {
+                    window.open('https://www.linkedin.com/feed/', '_blank');
+                    hint.classList.add('hidden');
+                }, 1500);
+            }).catch(err => {
+                alert("Failed to copy text. You can still share the link manually!");
+            });
+        }
+    </script>
+
+    <style>
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
+    </style>
+</body>
+</html>
