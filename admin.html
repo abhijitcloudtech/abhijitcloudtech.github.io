@@ -155,4 +155,127 @@
             if (e.key === 'Enter') document.getElementById('loginBtn').click();
         });
 
-        document.getElementById('loginBtn').addEventListener
+        document.getElementById('loginBtn').addEventListener('click', async () => {
+            const password = document.getElementById('adminPassword').value;
+            const loginBtn = document.getElementById('loginBtn');
+            const errorBox = document.getElementById('loginError');
+            
+            if(!password) return;
+
+            loginBtn.innerText = "Authenticating...";
+            errorBox.style.display = 'none';
+
+            try {
+                // Keep your existing Admin Worker URL here
+                const ADMIN_API_URL = "https://toolhub-admin-api.abhijit-cloudtech.workers.dev";
+                
+                const response = await fetch(ADMIN_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password: password })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) throw new Error(data.error || "Authentication failed");
+
+                // SUCCESS: Hide Login, Show Dashboard
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('dashboardSection').style.display = 'block';
+
+                // Populate Stats
+                document.getElementById('stat-users').innerText = data.metrics.totalUsers || 0;
+                document.getElementById('stat-usage').innerText = data.metrics.totalUsage || 0;
+                document.getElementById('stat-emails').innerText = data.metrics.emailsCollected || 0;
+                
+                // POPULATE NEW ROAST STATS
+                document.getElementById('stat-roasts').innerText = data.metrics.totalRoasts || 0;
+                document.getElementById('stat-shares').innerText = data.metrics.totalShares || 0;
+
+                // Populate User Table
+                const userTableBody = document.getElementById('userTableBody');
+                data.users.forEach(user => {
+                    const identifier = (user.email && user.email !== 'anonymous') ? `<span style="color: var(--primary); font-weight: 600;">${user.email}</span>` : `<span style="color: var(--text-muted); font-size: 0.85rem;">IP: ${user.ip.substring(0,12)}...</span>`;
+                    userTableBody.innerHTML += `
+                        <tr>
+                            <td>${identifier}</td>
+                            <td style="font-size: 0.85rem;">${user.toolname}</td>
+                            <td><span style="background: #e2e8f0; padding: 2px 8px; border-radius: 20px; font-size: 0.85rem; font-weight: bold;">${user.usage_count}</span></td>
+                            <td style="font-size: 0.85rem; color: var(--text-muted);">${user.last_used}</td>
+                        </tr>
+                    `;
+                });
+
+                // Populate Questions Table
+                const questionsTableBody = document.getElementById('questionsTableBody');
+                if (data.questions && data.questions.length > 0) {
+                    data.questions.forEach(q => {
+                        questionsTableBody.innerHTML += `
+                            <tr>
+                                <td style="font-weight: 600;">"${q.why_question}"</td>
+                                <td style="font-size: 0.85rem; color: var(--text-muted);">${q.email}</td>
+                            </tr>
+                        `;
+                    });
+                } else {
+                    questionsTableBody.innerHTML = `<tr><td colspan="2" style="text-align:center; color: var(--text-muted);">No questions recorded yet.</td></tr>`;
+                }
+
+                // POPULATE NEW ROASTS TABLE
+                const roastsTableBody = document.getElementById('roastsTableBody');
+                if (data.roasts && data.roasts.length > 0) {
+                    data.roasts.forEach(r => {
+                        // Format the LinkedIn badge
+                        const shareBadge = r.shared_to_li ? '<span style="color: #0A66C2; font-weight: bold;"><i class="fab fa-linkedin"></i> Yes</span>' : '<span style="color: var(--text-muted);">No</span>';
+                        
+                        // Format Date
+                        const dateObj = new Date(r.timestamp);
+                        const dateStr = dateObj.toLocaleDateString() + ' ' + dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+                        roastsTableBody.innerHTML += `
+                            <tr>
+                                <td style="font-size: 0.8rem; color: var(--text-muted);">${dateStr}</td>
+                                <td style="font-size: 0.85rem; font-weight: 600;">${r.input_length} chars</td>
+                                <td style="font-size: 0.9rem; line-height: 1.5; color: #333;">${r.roast_text}</td>
+                                <td style="text-align: center;">${shareBadge}</td>
+                            </tr>
+                        `;
+                    });
+                } else {
+                    roastsTableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; color: var(--text-muted);">No roasts generated yet.</td></tr>`;
+                }
+
+                // Dynamic Chart Processing
+                const toolNames = Object.keys(data.toolData);
+                const toolUsageCounts = Object.values(data.toolData);
+                
+                if(toolNames.length === 0) {
+                    toolNames.push('No Data');
+                    toolUsageCounts.push(1);
+                }
+
+                const chartColors = ['#7c3aed', '#4a6cf7', '#ef4444', '#10b981', '#f59e0b'];
+
+                const ctx = document.getElementById('usageChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: toolNames,
+                        datasets: [{
+                            data: toolUsageCounts,
+                            backgroundColor: chartColors.slice(0, toolNames.length),
+                            borderWidth: 0
+                        }]
+                    },
+                    options: { responsive: true, cutout: '70%' }
+                });
+
+            } catch (error) {
+                errorBox.innerText = error.message;
+                errorBox.style.display = 'block';
+                loginBtn.innerText = "Login to Dashboard";
+            }
+        });
+    </script>
+</body>
+</html>
