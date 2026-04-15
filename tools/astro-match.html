@@ -197,8 +197,11 @@
                 // 5. Render UI Update
                 resultArea.classList.remove('hidden');
                 
-                // Format the AI reading into proper paragraphs
                 const formattedReading = data.reading.split('\n').filter(p => p.trim() !== '').map(p => `<p class="mb-4">${p}</p>`).join('');
+
+                // Dynamic badges for Boy and Girl Manglik status
+                const bBadge = data.b_manglik ? '<span class="text-red-600 font-bold"><i class="fas fa-fire"></i> Boy: Yes</span>' : '<span class="text-green-600 font-bold"><i class="fas fa-check"></i> Boy: No</span>';
+                const gBadge = data.g_manglik ? '<span class="text-red-600 font-bold"><i class="fas fa-fire"></i> Girl: Yes</span>' : '<span class="text-green-600 font-bold"><i class="fas fa-check"></i> Girl: No</span>';
 
                 matchSummary.innerHTML = `
                     <div class="text-center mb-6">
@@ -206,14 +209,13 @@
                         <div class="text-sm uppercase tracking-widest text-gray-500 font-bold">Guna Milan Score</div>
                     </div>
                     
-                    <div class="flex justify-center gap-4 mb-8">
-                        <span class="px-5 py-2 rounded-full text-sm font-bold border ${data.manglik ? 'bg-red-50 text-red-600 border-red-200' : 'bg-green-50 text-green-600 border-green-200'}">
-                            <i class="fas ${data.manglik ? 'fa-exclamation-triangle' : 'fa-check-circle'}"></i> 
-                            Mangal Dosha: ${data.manglik ? 'Detected' : 'Clear'}
-                        </span>
+                    <div class="flex justify-center gap-6 mb-8 bg-gray-50 py-3 rounded-xl border border-gray-100">
+                        <div class="text-sm">Mangal Dosha: </div>
+                        <div class="text-sm border-r border-gray-300 pr-4">${bBadge}</div>
+                        <div class="text-sm">${gBadge}</div>
                     </div>
                     
-                    <div class="bg-gray-50 rounded-xl p-6 border border-gray-100">
+                    <div class="bg-gray-50 rounded-xl p-6 border border-gray-100 shadow-inner">
                         <h4 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2"><i class="fas fa-sparkles text-purple-500"></i> The AI Astrologer's Reading</h4>
                         <div class="prose prose-indigo max-w-none text-gray-700 leading-relaxed">
                             ${formattedReading}
