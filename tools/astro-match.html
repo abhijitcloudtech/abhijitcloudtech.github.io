@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proper Kundli Matching | AJ CloudTech</title>
+    
+    <link rel="canonical" href="https://ajcloudtech.in/tools/astro-match.html">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Prevents Tailwind from breaking your global style.css
+        tailwind.config = { 
+            corePlugins: { preflight: false },
+            theme: { extend: { colors: { gray: { 900: '#111827', 800: '#1f2937', 700: '#374151' } } } }
+        }
+    </script>
+    <style>
+        .astro-card { background: white; border-radius: 12px; padding: 25px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .input-group { margin-bottom: 15px; text-align: left; }
+        .input-group label { display: block; font-weight: 600; margin-bottom: 5px; color: #475569; font-size: 0.9rem; }
+        .input-group input { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: 'Inter'; font-size: 1rem; outline: none; transition: border-color 0.2s; box-sizing: border-box; }
+        .input-group input:focus { border-color: #4f46e5; ring: 2px; }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans antialiased min-h-screen flex flex-col">
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">AJ <span class="highlight">CloudTech</span></a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/tools.html" class="active">Tools</a></li>
+                <li><a href="/blog.html">Blog</a></li>
+                <li><a href="/youtube.html">YouTube</a></li>
+                <li><a href="/projects.html">Projects</a></li>
+                <li><a href="/contact.html">Contact</a></li>
+                <li><a href="/admin.html" class="admin-btn"><i class="fas fa-lock"></i> Admin</a></li>
+            </ul>
+            <div class="hamburger"><i class="fas fa-bars"></i></div>
+        </div>
+    </nav>
+
+    <main class="container flex-grow" style="margin-top: 40px; margin-bottom: 80px; max-width: 1000px;">
+        <div class="tw-wrapper">
+            
+            <div class="text-center mb-10">
+                <h1 class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-500 pb-2">
+                    ✨ Proper Vedic Matchmaking
+                </h1>
+                <p class="text-gray-600 text-lg mt-2">
+                    Accurate Guna Milan & Mangal Dosha check powered by real-time planetary math and AI insight.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="astro-card">
+                    <h3 class="text-indigo-600 text-xl mb-4 font-bold border-b pb-2"><i class="fas fa-male"></i> Partner 1 (Boy)</h3>
+                    <div class="input-group">
+                        <label>Full Name</label>
+                        <input type="text" id="p1_name" placeholder="Enter Name">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="input-group">
+                            <label>Birth Date</label>
+                            <input type="date" id="p1_dob">
+                        </div>
+                        <div class="input-group">
+                            <label>Birth Time</label>
+                            <input type="time" id="p1_tob">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>Birth City</label>
+                        <input type="text" id="p1_location" placeholder="e.g. Mumbai, India">
+                    </div>
+                </div>
+
+                <div class="astro-card">
+                    <h3 class="text-purple-600 text-xl mb-4 font-bold border-b pb-2"><i class="fas fa-female"></i> Partner 2 (Girl)</h3>
+                    <div class="input-group">
+                        <label>Full Name</label>
+                        <input type="text" id="p2_name" placeholder="Enter Name">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="input-group">
+                            <label>Birth Date</label>
+                            <input type="date" id="p2_dob">
+                        </div>
+                        <div class="input-group">
+                            <label>Birth Time</label>
+                            <input type="time" id="p2_tob">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>Birth City</label>
+                        <input type="text" id="p2_location" placeholder="e.g. Delhi, India">
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-10 text-center pb-10">
+                <button id="matchBtn" onclick="checkMatch()" class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold py-4 px-12 rounded-xl transition-transform transform hover:scale-[1.02] active:scale-95 shadow-lg text-lg border-none cursor-pointer flex items-center justify-center gap-2 mx-auto">
+                    <span id="btn-text">🔍 Check Compatibility</span>
+                    <svg id="loading-spinner" class="animate-spin h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                </button>
+                <p id="error-msg" class="text-red-500 font-medium mt-4 hidden"></p>
+                <p id="loadingText" class="mt-4 text-indigo-600 font-medium hidden">Consulting the Stars... (This takes a few seconds)</p>
+            </div>
+
+            <div id="resultArea" class="hidden animate-fade-in-up bg-white p-8 rounded-2xl shadow-2xl border border-indigo-100 mb-10 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 to-purple-500"></div>
+                <div id="matchSummary"></div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>© 2026 AJ CloudTech.</p>
+        </div>
+    </footer>
+
+    <script src="/js/script.js"></script>
+
+    <script>
+        // 🔴🔴🔴 YOUR CLOUDFLARE WORKER URL GOES HERE 🔴🔴🔴
+        const API_BASE_URL = "https://astro-match-api.abhijit-cloudtech.workers.dev";
+
+        async function checkMatch() {
+            const btn = document.getElementById('matchBtn');
+            const btnText = document.getElementById('btn-text');
+            const spinner = document.getElementById('loading-spinner');
+            const errorMsg = document.getElementById('error-msg');
+            const loadingText = document.getElementById('loadingText');
+            const resultArea = document.getElementById('resultArea');
+            const matchSummary = document.getElementById('matchSummary');
+
+            // 1. Validation Logic
+            const fields = ['p1_name', 'p1_dob', 'p1_tob', 'p1_location', 'p2_name', 'p2_dob', 'p2_tob', 'p2_location'];
+            for(let f of fields) {
+                if(!document.getElementById(f).value) {
+                    errorMsg.innerText = "Please fill in all details. The stars need exact data!";
+                    errorMsg.classList.remove('hidden');
+                    return;
+                }
+            }
+
+            // 2. Setup Loading State
+            errorMsg.classList.add('hidden');
+            resultArea.classList.add('hidden');
+            btn.disabled = true;
+            btn.classList.add('opacity-80', 'cursor-not-allowed');
+            btnText.innerText = "Calculating...";
+            spinner.classList.remove('hidden');
+            loadingText.classList.remove('hidden');
+
+            // 3. Collect Data Payload
+            const payload = {
+                p1: { 
+                    name: document.getElementById('p1_name').value, 
+                    dob: document.getElementById('p1_dob').value, 
+                    tob: document.getElementById('p1_tob').value, 
+                    loc: document.getElementById('p1_location').value 
+                },
+                p2: { 
+                    name: document.getElementById('p2_name').value, 
+                    dob: document.getElementById('p2_dob').value, 
+                    tob: document.getElementById('p2_tob').value, 
+                    loc: document.getElementById('p2_location').value 
+                }
+            };
+
+            try {
+                // 4. Fetch from Cloudflare Worker
+                const response = await fetch(`${API_BASE_URL}/api/match`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+                
+                if(!response.ok) throw new Error(data.error || "The planetary alignment failed. Try again.");
+
+                // 5. Render UI Update
+                resultArea.classList.remove('hidden');
+                
+                // Format the AI reading into proper paragraphs
+                const formattedReading = data.reading.split('\n').filter(p => p.trim() !== '').map(p => `<p class="mb-4">${p}</p>`).join('');
+
+                matchSummary.innerHTML = `
+                    <div class="text-center mb-6">
+                        <div class="text-6xl font-black text-indigo-600 mb-2">${data.score}<span class="text-3xl text-gray-400">/36</span></div>
+                        <div class="text-sm uppercase tracking-widest text-gray-500 font-bold">Guna Milan Score</div>
+                    </div>
+                    
+                    <div class="flex justify-center gap-4 mb-8">
+                        <span class="px-5 py-2 rounded-full text-sm font-bold border ${data.manglik ? 'bg-red-50 text-red-600 border-red-200' : 'bg-green-50 text-green-600 border-green-200'}">
+                            <i class="fas ${data.manglik ? 'fa-exclamation-triangle' : 'fa-check-circle'}"></i> 
+                            Mangal Dosha: ${data.manglik ? 'Detected' : 'Clear'}
+                        </span>
+                    </div>
+                    
+                    <div class="bg-gray-50 rounded-xl p-6 border border-gray-100">
+                        <h4 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2"><i class="fas fa-sparkles text-purple-500"></i> The AI Astrologer's Reading</h4>
+                        <div class="prose prose-indigo max-w-none text-gray-700 leading-relaxed">
+                            ${formattedReading}
+                        </div>
+                    </div>
+                `;
+                
+                // Scroll down to results
+                resultArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            } catch (error) {
+                errorMsg.innerText = "Error: " + error.message;
+                errorMsg.classList.remove('hidden');
+            } finally {
+                // Reset Button State
+                btn.disabled = false;
+                btn.classList.remove('opacity-80', 'cursor-not-allowed');
+                btnText.innerText = "🔍 Check Compatibility";
+                spinner.classList.add('hidden');
+                loadingText.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
