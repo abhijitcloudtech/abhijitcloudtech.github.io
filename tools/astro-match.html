@@ -24,7 +24,7 @@
         .input-group { margin-bottom: 15px; text-align: left; }
         .input-group label { display: block; font-weight: 600; margin-bottom: 5px; color: #475569; font-size: 0.9rem; }
         .input-group input { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: 'Inter'; font-size: 1rem; outline: none; transition: border-color 0.2s; box-sizing: border-box; }
-        .input-group input:focus { border-color: #4f46e5; ring: 2px; }
+        .input-group input:focus { border-color: #4f46e5; box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2); }
         
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(20px); }
@@ -56,16 +56,16 @@
             
             <div class="text-center mb-10">
                 <h1 class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-500 pb-2">
-                    ✨ Proper Vedic Matchmaking
+                    ✨ Premium Vedic Matchmaking
                 </h1>
                 <p class="text-gray-600 text-lg mt-2">
-                    Accurate Guna Milan & Mangal Dosha check powered by real-time planetary math and AI insight.
+                    Comprehensive Guna Milan analysis powered by real-time planetary math and AI insight.
                 </p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="astro-card">
-                    <h3 class="text-indigo-600 text-xl mb-4 font-bold border-b pb-2"><i class="fas fa-male"></i> Partner 1 (Boy)</h3>
+                    <h3 class="text-indigo-600 text-xl mb-4 font-bold border-b pb-2"><i class="fas fa-male"></i> Partner 1</h3>
                     <div class="input-group">
                         <label>Full Name</label>
                         <input type="text" id="p1_name" placeholder="Enter Name">
@@ -87,7 +87,7 @@
                 </div>
 
                 <div class="astro-card">
-                    <h3 class="text-purple-600 text-xl mb-4 font-bold border-b pb-2"><i class="fas fa-female"></i> Partner 2 (Girl)</h3>
+                    <h3 class="text-purple-600 text-xl mb-4 font-bold border-b pb-2"><i class="fas fa-female"></i> Partner 2</h3>
                     <div class="input-group">
                         <label>Full Name</label>
                         <input type="text" id="p2_name" placeholder="Enter Name">
@@ -111,14 +111,14 @@
 
             <div class="mt-10 text-center pb-10">
                 <button id="matchBtn" onclick="checkMatch()" class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold py-4 px-12 rounded-xl transition-transform transform hover:scale-[1.02] active:scale-95 shadow-lg text-lg border-none cursor-pointer flex items-center justify-center gap-2 mx-auto">
-                    <span id="btn-text">🔍 Check Compatibility</span>
+                    <span id="btn-text">🔍 Generate Compatibility Report</span>
                     <svg id="loading-spinner" class="animate-spin h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                 </button>
                 <p id="error-msg" class="text-red-500 font-medium mt-4 hidden"></p>
                 <p id="loadingText" class="mt-4 text-indigo-600 font-medium hidden">Consulting the Stars... (This takes a few seconds)</p>
             </div>
 
-            <div id="resultArea" class="hidden animate-fade-in-up bg-white p-8 rounded-2xl shadow-2xl border border-indigo-100 mb-10 relative overflow-hidden">
+            <div id="resultArea" class="hidden animate-fade-in-up bg-white p-8 md:p-10 rounded-2xl shadow-2xl border border-indigo-100 mb-10 relative overflow-hidden">
                 <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 to-purple-500"></div>
                 <div id="matchSummary"></div>
             </div>
@@ -135,7 +135,7 @@
     <script src="/js/script.js"></script>
 
     <script>
-        // 🔴🔴🔴 YOUR CLOUDFLARE WORKER URL GOES HERE 🔴🔴🔴
+        // Keep your Cloudflare Worker URL
         const API_BASE_URL = "https://astro-match-api.abhijit-cloudtech.workers.dev";
 
         async function checkMatch() {
@@ -162,7 +162,7 @@
             resultArea.classList.add('hidden');
             btn.disabled = true;
             btn.classList.add('opacity-80', 'cursor-not-allowed');
-            btnText.innerText = "Calculating...";
+            btnText.innerText = "Analyzing Planets...";
             spinner.classList.remove('hidden');
             loadingText.classList.remove('hidden');
 
@@ -184,7 +184,7 @@
 
             try {
                 // 4. Fetch from Cloudflare Worker
-                const response = await fetch(`${API_BASE_URL}/api/match`, {
+                const response = await fetch(API_BASE_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
@@ -197,29 +197,20 @@
                 // 5. Render UI Update
                 resultArea.classList.remove('hidden');
                 
-                const formattedReading = data.reading.split('\n').filter(p => p.trim() !== '').map(p => `<p class="mb-4">${p}</p>`).join('');
-
-                // Dynamic badges for Boy and Girl Manglik status
-                const bBadge = data.b_manglik ? '<span class="text-red-600 font-bold"><i class="fas fa-fire"></i> Boy: Yes</span>' : '<span class="text-green-600 font-bold"><i class="fas fa-check"></i> Boy: No</span>';
-                const gBadge = data.g_manglik ? '<span class="text-red-600 font-bold"><i class="fas fa-fire"></i> Girl: Yes</span>' : '<span class="text-green-600 font-bold"><i class="fas fa-check"></i> Girl: No</span>';
+                // Inject premium CSS styling to the AI's raw HTML output
+                const styledReading = data.reading
+                    .replace(/<h3>/g, '<h3 class="text-xl md:text-2xl font-bold text-indigo-800 mt-8 mb-3 border-b-2 border-indigo-50 pb-2 flex items-center gap-2"><i class="fas fa-star text-purple-400 text-lg"></i> ')
+                    .replace(/<p>/g, '<p class="text-gray-700 leading-relaxed mb-6 text-lg">')
+                    .replace(/<strong>/g, '<strong class="text-indigo-900 font-semibold bg-indigo-50 px-1 rounded">');
 
                 matchSummary.innerHTML = `
-                    <div class="text-center mb-6">
-                        <div class="text-6xl font-black text-indigo-600 mb-2">${data.score}<span class="text-3xl text-gray-400">/36</span></div>
-                        <div class="text-sm uppercase tracking-widest text-gray-500 font-bold">Guna Milan Score</div>
+                    <div class="text-center mb-10 pb-8 border-b border-gray-100">
+                        <div class="text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 mb-2">${data.score}<span class="text-4xl text-gray-300">/36</span></div>
+                        <div class="text-sm uppercase tracking-widest text-gray-500 font-bold">Total Ashtakoot Match Score</div>
                     </div>
                     
-                    <div class="flex justify-center gap-6 mb-8 bg-gray-50 py-3 rounded-xl border border-gray-100">
-                        <div class="text-sm">Mangal Dosha: </div>
-                        <div class="text-sm border-r border-gray-300 pr-4">${bBadge}</div>
-                        <div class="text-sm">${gBadge}</div>
-                    </div>
-                    
-                    <div class="bg-gray-50 rounded-xl p-6 border border-gray-100 shadow-inner">
-                        <h4 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2"><i class="fas fa-sparkles text-purple-500"></i> The AI Astrologer's Reading</h4>
-                        <div class="prose prose-indigo max-w-none text-gray-700 leading-relaxed">
-                            ${formattedReading}
-                        </div>
+                    <div class="prose max-w-none text-left">
+                        ${styledReading}
                     </div>
                 `;
                
@@ -233,7 +224,7 @@
                 // Reset Button State
                 btn.disabled = false;
                 btn.classList.remove('opacity-80', 'cursor-not-allowed');
-                btnText.innerText = "🔍 Check Compatibility";
+                btnText.innerText = "🔍 Generate Compatibility Report";
                 spinner.classList.add('hidden');
                 loadingText.classList.add('hidden');
             }
