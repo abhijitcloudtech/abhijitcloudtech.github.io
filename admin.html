@@ -84,6 +84,10 @@
                     <div class="stat-value" id="stat-shares" style="color: #0A66C2;">0</div>
                     <div class="stat-label">LinkedIn Shares</div>
                 </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-astro" style="color: #8b5cf6;">0</div>
+                    <div class="stat-label">Astro Matches</div>
+                </div>
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start; margin-bottom: 30px;">
@@ -128,7 +132,7 @@
                 </div>
             </div>
 
-            <div class="card" style="padding: 0; overflow: hidden; margin-bottom: 50px;">
+            <div class="card" style="padding: 0; overflow: hidden; margin-bottom: 30px;">
                 <h3 style="padding: 20px 20px 10px;"><i class="fas fa-fire" style="color: #ef4444;"></i> Recent AI CV Roasts</h3>
                 <div style="max-height: 500px; overflow-y: auto;">
                     <table class="data-table">
@@ -141,6 +145,25 @@
                             </tr>
                         </thead>
                         <tbody id="roastsTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card" style="padding: 0; overflow: hidden; margin-bottom: 50px;">
+                <h3 style="padding: 20px 20px 10px;"><i class="fas fa-star" style="color: #8b5cf6;"></i> Recent Astro Matches</h3>
+                <div style="max-height: 500px; overflow-y: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 20%;">Date / Time</th>
+                                <th style="width: 20%;">Partner 1</th>
+                                <th style="width: 20%;">Partner 2</th>
+                                <th style="width: 15%; text-align: center;">Score</th>
+                                <th style="width: 25%;">User IP</th>
+                            </tr>
+                        </thead>
+                        <tbody id="astroTableBody">
                         </tbody>
                     </table>
                 </div>
@@ -166,7 +189,7 @@
             errorBox.style.display = 'none';
 
             try {
-                // Keep your existing Admin Worker URL here
+                // Your Master Admin API Worker URL
                 const ADMIN_API_URL = "https://toolhub-admin-api.abhijit-cloudtech.workers.dev";
                 
                 const response = await fetch(ADMIN_API_URL, {
@@ -187,10 +210,11 @@
                 document.getElementById('stat-users').innerText = data.metrics.totalUsers || 0;
                 document.getElementById('stat-usage').innerText = data.metrics.totalUsage || 0;
                 document.getElementById('stat-emails').innerText = data.metrics.emailsCollected || 0;
-                
-                // POPULATE NEW ROAST STATS
                 document.getElementById('stat-roasts').innerText = data.metrics.totalRoasts || 0;
                 document.getElementById('stat-shares').innerText = data.metrics.totalShares || 0;
+                
+                // POPULATE NEW ASTRO STAT
+                document.getElementById('stat-astro').innerText = data.metrics.totalAstroMatches || 0;
 
                 // Populate User Table
                 const userTableBody = document.getElementById('userTableBody');
@@ -221,14 +245,11 @@
                     questionsTableBody.innerHTML = `<tr><td colspan="2" style="text-align:center; color: var(--text-muted);">No questions recorded yet.</td></tr>`;
                 }
 
-                // POPULATE NEW ROASTS TABLE
+                // Populate Roasts Table
                 const roastsTableBody = document.getElementById('roastsTableBody');
                 if (data.roasts && data.roasts.length > 0) {
                     data.roasts.forEach(r => {
-                        // Format the LinkedIn badge
                         const shareBadge = r.shared_to_li ? '<span style="color: #0A66C2; font-weight: bold;"><i class="fab fa-linkedin"></i> Yes</span>' : '<span style="color: var(--text-muted);">No</span>';
-                        
-                        // Format Date
                         const dateObj = new Date(r.timestamp);
                         const dateStr = dateObj.toLocaleDateString() + ' ' + dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 
@@ -243,6 +264,27 @@
                     });
                 } else {
                     roastsTableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; color: var(--text-muted);">No roasts generated yet.</td></tr>`;
+                }
+
+                // POPULATE NEW ASTRO TABLE
+                const astroTableBody = document.getElementById('astroTableBody');
+                if (data.astroMatches && data.astroMatches.length > 0) {
+                    data.astroMatches.forEach(row => {
+                        const dateObj = new Date(row.timestamp);
+                        const dateStr = dateObj.toLocaleDateString() + ' ' + dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                        
+                        astroTableBody.innerHTML += `
+                            <tr>
+                                <td style="font-size: 0.8rem; color: var(--text-muted);">${dateStr}</td>
+                                <td style="font-weight: 600;">${row.p1_name}</td>
+                                <td style="font-weight: 600;">${row.p2_name}</td>
+                                <td style="text-align: center;"><span style="background: #ede9fe; color: #6d28d9; padding: 4px 8px; border-radius: 6px; font-weight: bold;">${row.match_score}/36</span></td>
+                                <td style="font-size: 0.85rem; color: var(--text-muted); font-family: monospace;">${row.user_ip || 'N/A'}</td>
+                            </tr>
+                        `;
+                    });
+                } else {
+                    astroTableBody.innerHTML = `<tr><td colspan="5" style="text-align:center; color: var(--text-muted);">No matches recorded yet.</td></tr>`;
                 }
 
                 // Dynamic Chart Processing
