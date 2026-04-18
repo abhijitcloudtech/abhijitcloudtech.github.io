@@ -170,170 +170,190 @@
 
     <script src="/js/script.js"></script>
     <script>
-        // 🔴 Replace with actual Worker URL
-        const API_BASE_URL = "https://competency-api.abhijit-cloudtech.workers.dev";
-        
-        let appState = { profile: {}, questions: [] };
+    // 🔴 Replace with actual Worker URL
+    const API_BASE_URL = "https://competency-api.abhijit-cloudtech.workers.dev";
+    
+    let appState = { profile: {}, questions: [] };
 
-        function toggleOtherDomain() {
-            const select = document.getElementById('prof_domain');
-            const otherInput = document.getElementById('prof_domain_other');
-            if(select.value === 'Other') {
-                otherInput.classList.remove('hidden');
-                otherInput.required = true;
-            } else {
-                otherInput.classList.add('hidden');
-                otherInput.required = false;
-            }
+    function toggleOtherDomain() {
+        const select = document.getElementById('prof_domain');
+        const otherInput = document.getElementById('prof_domain_other');
+        if(select.value === 'Other') {
+            otherInput.classList.remove('hidden');
+            otherInput.required = true;
+        } else {
+            otherInput.classList.add('hidden');
+            otherInput.required = false;
+        }
+    }
+
+    async function generateQuestions() {
+        const errorEl = document.getElementById('error-1');
+        errorEl.classList.add('hidden');
+
+        const domainSelect = document.getElementById('prof_domain').value;
+        const finalDomain = domainSelect === 'Other' ? document.getElementById('prof_domain_other').value.trim() : domainSelect;
+
+        appState.profile = {
+            name: document.getElementById('prof_name').value.trim(),
+            email: document.getElementById('prof_email').value.trim(),
+            org: document.getElementById('prof_org').value.trim(),
+            yoe: document.getElementById('prof_yoe').value.trim(),
+            domain: finalDomain,
+            technology: document.getElementById('prof_tech').value.trim()
+        };
+
+        if (!appState.profile.name || !appState.profile.email || !appState.profile.yoe || !appState.profile.technology || !appState.profile.domain) {
+            errorEl.innerText = "Please fill out all required fields.";
+            errorEl.classList.remove('hidden');
+            return;
         }
 
-        async function generateQuestions() {
-            const errorEl = document.getElementById('error-1');
-            errorEl.classList.add('hidden');
+        showLoading("Generating custom scenario MCQs...");
 
-            const domainSelect = document.getElementById('prof_domain').value;
-            const finalDomain = domainSelect === 'Other' ? document.getElementById('prof_domain_other').value.trim() : domainSelect;
+        try {
+            const response = await fetch(API_BASE_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: "generate", profile: appState.profile })
+            });
 
-            appState.profile = {
-                name: document.getElementById('prof_name').value.trim(),
-                email: document.getElementById('prof_email').value.trim(),
-                org: document.getElementById('prof_org').value.trim(),
-                yoe: document.getElementById('prof_yoe').value.trim(),
-                domain: finalDomain,
-                technology: document.getElementById('prof_tech').value.trim()
-            };
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.error || "Failed to generate assessment.");
 
-            if (!appState.profile.name || !appState.profile.email || !appState.profile.yoe || !appState.profile.technology || !appState.profile.domain) {
-                errorEl.innerText = "Please fill out all required fields.";
-                errorEl.classList.remove('hidden');
-                return;
-            }
+            appState.questions = data.questions;
+            renderMCQUI();
+            
+            document.getElementById('step-1').classList.add('hidden');
+            document.getElementById('step-2').classList.remove('hidden');
+            updateNav(2);
 
-            showLoading("Analyzing profile and generating questions...");
-
-            try {
-                const response = await fetch(API_BASE_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: "generate", profile: appState.profile })
-                });
-
-                const data = await response.json();
-                if (!response.ok) throw new Error(data.error || "Failed to generate assessment.");
-
-                appState.questions = data.questions;
-                renderQuestionsUI();
-                
-                document.getElementById('step-1').classList.add('hidden');
-                document.getElementById('step-2').classList.remove('hidden');
-                updateNav(2);
-
-            } catch (error) {
-                errorEl.innerText = error.message;
-                errorEl.classList.remove('hidden');
-            } finally {
-                hideLoading();
-            }
+        } catch (error) {
+            errorEl.innerText = error.message;
+            errorEl.classList.remove('hidden');
+        } finally {
+            hideLoading();
         }
+    }
 
-        function renderQuestionsUI() {
-            const container = document.getElementById('questions-container');
-            container.innerHTML = ''; 
+    // NEW: Render Multiple Choice Radio Buttons
+    function renderMCQUI() {
+        const container = document.getElementById('questions-container');
+        container.innerHTML = ''; 
 
-            appState.questions.forEach((q, index) => {
-                container.innerHTML += `
-                    <div class="input-group">
-                        <label class="text-gray-800 text-lg mb-3">
-                            <span class="text-indigo-500 mr-2">Q${index + 1}.</span> ${q}
-                        </label>
-                        <textarea id="answer-${index}" rows="4" placeholder="Draft your reasoning here..." class="resize-y" required></textarea>
+        appState.questions.forEach((qObj, index) => {
+            let optionsHtml = qObj.options.map((opt, oIndex) => `
+                <label class="flex items-start gap-4 p-4 border border-gray-200 rounded-xl hover:bg-indigo-50 hover:border-indigo-200 cursor-pointer transition-all bg-white shadow-sm">
+                    <input type="radio" name="q-${index}" value="${opt}" class="mt-1 w-4 h-4 text-indigo-600 focus:ring-indigo-500 cursor-pointer">
+                    <span class="text-gray-700 font-medium leading-relaxed">${opt}</span>
+                </label>
+            `).join('');
+
+            container.innerHTML += `
+                <div class="mb-10 bg-gray-50 p-6 rounded-2xl border border-gray-100">
+                    <h3 class="text-gray-900 font-bold text-lg mb-5 flex items-start gap-2">
+                        <span class="bg-indigo-600 text-white w-8 h-8 flex items-center justify-center rounded-full flex-shrink-0 text-sm">${index + 1}</span> 
+                        <span class="mt-1">${qObj.question}</span>
+                    </h3>
+                    <div class="space-y-3 pl-10">
+                        ${optionsHtml}
                     </div>
-                `;
+                </div>
+            `;
+        });
+    }
+
+    async function evaluateAnswers() {
+        const errorEl = document.getElementById('error-2');
+        errorEl.classList.add('hidden');
+
+        // Collect MCQ Answers
+        let qaData = [];
+        let allAnswered = true;
+        
+        for (let i = 0; i < appState.questions.length; i++) {
+            const selected = document.querySelector(`input[name="q-${i}"]:checked`);
+            if (!selected) {
+                allAnswered = false;
+                break;
+            }
+            qaData.push({
+                question: appState.questions[i].question,
+                answer: selected.value
             });
         }
 
-        async function evaluateAnswers() {
-            const errorEl = document.getElementById('error-2');
-            errorEl.classList.add('hidden');
-
-            let answers = [];
-            let allAnswered = true;
-            for (let i = 0; i < appState.questions.length; i++) {
-                const ans = document.getElementById(`answer-${i}`).value.trim();
-                if (!ans) allAnswered = false;
-                answers.push(ans);
-            }
-
-            if (!allAnswered) {
-                errorEl.innerText = "Please provide an answer for every question.";
-                errorEl.classList.remove('hidden');
-                return;
-            }
-
-            showLoading("The Assessor is grading your responses...");
-
-            try {
-                const response = await fetch(API_BASE_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: "evaluate", profile: appState.profile, questions: appState.questions, answers: answers })
-                });
-
-                const data = await response.json();
-                if (!response.ok) throw new Error(data.error || "Failed to evaluate assessment.");
-
-                renderResultsUI(data.level, data.analysis);
-                
-                document.getElementById('step-2').classList.add('hidden');
-                document.getElementById('step-3').classList.remove('hidden');
-                updateNav(3);
-
-            } catch (error) {
-                errorEl.innerText = error.message;
-                errorEl.classList.remove('hidden');
-            } finally {
-                hideLoading();
-            }
+        if (!allAnswered) {
+            errorEl.innerText = "Please select an answer for every question.";
+            errorEl.classList.remove('hidden');
+            return;
         }
 
-        function renderResultsUI(level, analysisHtml) {
-            const badgeEl = document.getElementById('result-badge');
-            const cleanLevel = level.replace(/[^a-zA-Z]/g, '').toLowerCase();
+        showLoading("The Assessor is analyzing your selections...");
+
+        try {
+            const response = await fetch(API_BASE_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: "evaluate", profile: appState.profile, qaData: qaData })
+            });
+
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.error || "Failed to evaluate assessment.");
+
+            renderResultsUI(data.level, data.analysis);
             
-            badgeEl.className = "inline-block px-8 py-3 rounded-full text-4xl font-black shadow-sm border border-opacity-20 mb-2 ";
-            if (cleanLevel.includes('novice')) badgeEl.classList.add('badge-novice', 'border-sky-300');
-            else if (cleanLevel.includes('competent')) badgeEl.classList.add('badge-competent', 'border-green-300');
-            else if (cleanLevel.includes('proficient')) badgeEl.classList.add('badge-proficient', 'border-purple-300');
-            else if (cleanLevel.includes('expert')) badgeEl.classList.add('badge-expert', 'border-orange-300');
-            else badgeEl.classList.add('bg-gray-200', 'text-gray-700', 'border-gray-300');
+            document.getElementById('step-2').classList.add('hidden');
+            document.getElementById('step-3').classList.remove('hidden');
+            updateNav(3);
 
-            badgeEl.innerText = level;
-
-            const styledAnalysis = analysisHtml
-                .replace(/<h3>/g, '<h3 class="text-xl font-bold text-gray-800 mt-8 mb-4 border-b pb-2">')
-                .replace(/<p>/g, '<p class="text-gray-700 mb-4 leading-relaxed text-lg">');
-            
-            document.getElementById('result-analysis').innerHTML = styledAnalysis;
+        } catch (error) {
+            errorEl.innerText = error.message;
+            errorEl.classList.remove('hidden');
+        } finally {
+            hideLoading();
         }
+    }
 
-        function showLoading(text) {
-            document.getElementById('loading-text').innerText = text;
-            document.getElementById('loading-overlay').classList.remove('hidden');
-        }
+    function renderResultsUI(level, analysisHtml) {
+        const badgeEl = document.getElementById('result-badge');
+        const cleanLevel = level.replace(/[^a-zA-Z]/g, '').toLowerCase();
+        
+        badgeEl.className = "inline-block px-8 py-3 rounded-full text-4xl font-black shadow-sm border border-opacity-20 mb-2 ";
+        if (cleanLevel.includes('novice')) badgeEl.classList.add('badge-novice', 'border-sky-300');
+        else if (cleanLevel.includes('competent')) badgeEl.classList.add('badge-competent', 'border-green-300');
+        else if (cleanLevel.includes('proficient')) badgeEl.classList.add('badge-proficient', 'border-purple-300');
+        else if (cleanLevel.includes('expert')) badgeEl.classList.add('badge-expert', 'border-orange-300');
+        else badgeEl.classList.add('bg-gray-200', 'text-gray-700', 'border-gray-300');
 
-        function hideLoading() {
-            document.getElementById('loading-overlay').classList.add('hidden');
-        }
+        badgeEl.innerText = level;
 
-        function updateNav(step) {
-            const n1 = document.getElementById('nav-step-1');
-            const n2 = document.getElementById('nav-step-2');
-            const n3 = document.getElementById('nav-step-3');
-            
-            n1.className = step === 1 ? "text-indigo-600 border-b-2 border-indigo-600 pb-1" : "text-gray-400";
-            n2.className = step === 2 ? "text-indigo-600 border-b-2 border-indigo-600 pb-1" : "text-gray-400";
-            n3.className = step === 3 ? "text-indigo-600 border-b-2 border-indigo-600 pb-1" : "text-gray-400";
-        }
-    </script>
+        // Apply global styling to the AI's HTML output headers
+        const styledAnalysis = analysisHtml
+            .replace(/<h3>/g, '<h3 class="text-xl font-black text-gray-900 mt-10 mb-4 pb-2 border-b-2 border-indigo-100 uppercase tracking-wide">')
+            .replace(/<p>/g, '<p class="text-gray-700 mb-4 leading-relaxed text-lg">');
+        
+        document.getElementById('result-analysis').innerHTML = styledAnalysis;
+    }
+
+    function showLoading(text) {
+        document.getElementById('loading-text').innerText = text;
+        document.getElementById('loading-overlay').classList.remove('hidden');
+    }
+
+    function hideLoading() {
+        document.getElementById('loading-overlay').classList.add('hidden');
+    }
+
+    function updateNav(step) {
+        const n1 = document.getElementById('nav-step-1');
+        const n2 = document.getElementById('nav-step-2');
+        const n3 = document.getElementById('nav-step-3');
+        
+        n1.className = step === 1 ? "text-indigo-600 border-b-2 border-indigo-600 pb-1" : "text-gray-400";
+        n2.className = step === 2 ? "text-indigo-600 border-b-2 border-indigo-600 pb-1" : "text-gray-400";
+        n3.className = step === 3 ? "text-indigo-600 border-b-2 border-indigo-600 pb-1" : "text-gray-400";
+    }
+</script>
 </body>
 </html>
