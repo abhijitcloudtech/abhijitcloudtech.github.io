@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proper Kundli Matching | AJ CloudTech</title>
+    <title>Premium Vedic Matchmaking | AJ CloudTech</title>
     
     <link rel="canonical" href="https://ajcloudtech.in/tools/astro-match.html">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -13,7 +13,6 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        // Prevents Tailwind from breaking your global style.css
         tailwind.config = { 
             corePlugins: { preflight: false },
             theme: { extend: { colors: { gray: { 900: '#111827', 800: '#1f2937', 700: '#374151' } } } }
@@ -47,7 +46,6 @@
                 <li><a href="/contact.html">Contact</a></li>
                 <li><a href="/admin.html" class="admin-btn"><i class="fas fa-lock"></i> Admin</a></li>
             </ul>
-            <div class="hamburger"><i class="fas fa-bars"></i></div>
         </div>
     </nav>
 
@@ -61,6 +59,12 @@
                 <p class="text-gray-600 text-lg mt-2">
                     Comprehensive Guna Milan analysis powered by real-time planetary math and AI insight.
                 </p>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-md border border-gray-100 mb-8 max-w-md mx-auto text-center">
+                <label class="block text-gray-700 font-bold mb-2">Your Account Email</label>
+                <input type="email" id="user_email" placeholder="Enter email to verify account tier" class="w-full p-3 border border-gray-300 rounded-lg outline-none focus:border-indigo-500 text-center" required>
+                <p class="text-xs text-gray-500 mt-2">Premium subscribers unlock detailed analysis and higher daily limits.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -115,11 +119,17 @@
                     <svg id="loading-spinner" class="animate-spin h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                 </button>
                 <p id="error-msg" class="text-red-500 font-medium mt-4 hidden"></p>
-                <p id="loadingText" class="mt-4 text-indigo-600 font-medium hidden">Consulting the Stars... (This takes a few seconds)</p>
+                
+                <div id="upgrade-box" class="hidden mt-6 bg-yellow-50 border border-yellow-200 p-4 rounded-xl max-w-md mx-auto text-yellow-800">
+                    <p class="font-bold"><i class="fas fa-crown text-yellow-500"></i> Want more matches?</p>
+                    <p class="text-sm mt-1 mb-3">You've hit the free tier daily limit. Upgrade to Premium for 5x matches and deeper astrological insights.</p>
+                    <button class="bg-yellow-500 text-white px-4 py-2 rounded font-bold shadow-sm hover:bg-yellow-600 transition">View Plans</button>
+                </div>
             </div>
 
             <div id="resultArea" class="hidden animate-fade-in-up bg-white p-8 md:p-10 rounded-2xl shadow-2xl border border-indigo-100 mb-10 relative overflow-hidden">
                 <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 to-purple-500"></div>
+                <div id="tier-badge" class="absolute top-4 right-4 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full"></div>
                 <div id="matchSummary"></div>
             </div>
 
@@ -135,7 +145,7 @@
     <script src="/js/script.js"></script>
 
     <script>
-        // Keep your Cloudflare Worker URL
+        // 🔴🔴🔴 Replace with your Unified API Worker URL
         const API_BASE_URL = "https://astro-match-api.abhijit-cloudtech.workers.dev";
 
         async function checkMatch() {
@@ -143,11 +153,17 @@
             const btnText = document.getElementById('btn-text');
             const spinner = document.getElementById('loading-spinner');
             const errorMsg = document.getElementById('error-msg');
-            const loadingText = document.getElementById('loadingText');
             const resultArea = document.getElementById('resultArea');
             const matchSummary = document.getElementById('matchSummary');
+            const upgradeBox = document.getElementById('upgrade-box');
 
-            // 1. Validation Logic
+            const userEmail = document.getElementById('user_email').value.trim();
+            if (!userEmail || !userEmail.includes('@')) {
+                errorMsg.innerText = "Please provide a valid account email address.";
+                errorMsg.classList.remove('hidden');
+                return;
+            }
+
             const fields = ['p1_name', 'p1_dob', 'p1_tob', 'p1_location', 'p2_name', 'p2_dob', 'p2_tob', 'p2_location'];
             for(let f of fields) {
                 if(!document.getElementById(f).value) {
@@ -157,33 +173,21 @@
                 }
             }
 
-            // 2. Setup Loading State
             errorMsg.classList.add('hidden');
+            upgradeBox.classList.add('hidden');
             resultArea.classList.add('hidden');
             btn.disabled = true;
             btn.classList.add('opacity-80', 'cursor-not-allowed');
             btnText.innerText = "Analyzing Planets...";
             spinner.classList.remove('hidden');
-            loadingText.classList.remove('hidden');
 
-            // 3. Collect Data Payload
             const payload = {
-                p1: { 
-                    name: document.getElementById('p1_name').value, 
-                    dob: document.getElementById('p1_dob').value, 
-                    tob: document.getElementById('p1_tob').value, 
-                    loc: document.getElementById('p1_location').value 
-                },
-                p2: { 
-                    name: document.getElementById('p2_name').value, 
-                    dob: document.getElementById('p2_dob').value, 
-                    tob: document.getElementById('p2_tob').value, 
-                    loc: document.getElementById('p2_location').value 
-                }
+                user_email: userEmail,
+                p1: { name: document.getElementById('p1_name').value, dob: document.getElementById('p1_dob').value, tob: document.getElementById('p1_tob').value, loc: document.getElementById('p1_location').value },
+                p2: { name: document.getElementById('p2_name').value, dob: document.getElementById('p2_dob').value, tob: document.getElementById('p2_tob').value, loc: document.getElementById('p2_location').value }
             };
 
             try {
-                // Fetch from Cloudflare Worker
                 const response = await fetch(API_BASE_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -192,18 +196,28 @@
 
                 const data = await response.json();
                 
-                if(!response.ok) throw new Error(data.error || "The planetary alignment failed. Try again.");
+                if(!response.ok) {
+                    if(response.status === 429) upgradeBox.classList.remove('hidden');
+                    throw new Error(data.error || "The planetary alignment failed. Try again.");
+                }
 
-                // Render UI Update
                 resultArea.classList.remove('hidden');
                 
-                // Inject premium CSS styling to the AI's raw HTML output
+                // Show Plan Tier
+                const tierBadge = document.getElementById('tier-badge');
+                if(data.plan === 'free') {
+                    tierBadge.innerText = 'Free Tier';
+                    tierBadge.className = 'absolute top-4 right-4 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-gray-100 text-gray-500';
+                } else {
+                    tierBadge.innerText = 'Premium Analysis';
+                    tierBadge.className = 'absolute top-4 right-4 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 border border-yellow-200';
+                }
+
                 const styledReading = data.reading
                     .replace(/<h3>/g, '<h3 class="text-xl md:text-2xl font-bold text-indigo-800 mt-8 mb-3 border-b-2 border-indigo-50 pb-2 flex items-center gap-2"><i class="fas fa-star text-purple-400 text-lg"></i> ')
                     .replace(/<p>/g, '<p class="text-gray-700 leading-relaxed mb-6 text-lg">')
                     .replace(/<strong>/g, '<strong class="text-indigo-900 font-semibold bg-indigo-50 px-1 rounded">');
 
-                // Generate Manglik Badges
                 const p1Badge = data.p1_manglik 
                     ? '<span class="text-red-600 font-bold bg-red-50 px-3 py-1 rounded-full"><i class="fas fa-fire"></i> Yes</span>' 
                     : '<span class="text-emerald-600 font-bold bg-emerald-50 px-3 py-1 rounded-full"><i class="fas fa-check-circle"></i> No</span>';
@@ -235,20 +249,16 @@
                     </div>
                 `;
                
-                // Scroll down to results
                 resultArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
             } catch (error) {
-                // ... rest of error handling
-                errorMsg.innerText = "Error: " + error.message;
+                errorMsg.innerText = error.message;
                 errorMsg.classList.remove('hidden');
             } finally {
-                // Reset Button State
                 btn.disabled = false;
                 btn.classList.remove('opacity-80', 'cursor-not-allowed');
                 btnText.innerText = "🔍 Generate Compatibility Report";
                 spinner.classList.add('hidden');
-                loadingText.classList.add('hidden');
             }
         }
     </script>
