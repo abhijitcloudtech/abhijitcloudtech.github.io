@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Competency Analyzer | AJ CloudTech</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { 
+            corePlugins: { preflight: false },
+            theme: { extend: { colors: { gray: { 900: '#111827', 800: '#1f2937', 700: '#374151' } } } }
+        }
+    </script>
+    <style>
+        .input-group label { display: block; font-weight: 600; margin-bottom: 5px; color: #475569; font-size: 0.9rem; }
+        .input-group input, .input-group select, .input-group textarea { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: 'Inter'; font-size: 1rem; outline: none; transition: all 0.2s; box-sizing: border-box; }
+        .input-group input:focus, .input-group select:focus, .input-group textarea:focus { border-color: #4f46e5; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
+        .step-container { background: white; border-radius: 16px; padding: 40px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0; }
+        
+        /* Badge Colors */
+        .badge-novice { background: #e0f2fe; color: #0284c7; }
+        .badge-competent { background: #dcfce7; color: #16a34a; }
+        .badge-proficient { background: #f3e8ff; color: #9333ea; }
+        .badge-expert { background: #ffedd5; color: #ea580c; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans antialiased min-h-screen flex flex-col">
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">AJ <span class="highlight">CloudTech</span></a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/tools.html" class="active">Tools</a></li>
+                <li><a href="/admin.html" class="admin-btn"><i class="fas fa-lock"></i> Admin</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container flex-grow" style="margin-top: 40px; margin-bottom: 80px; max-width: 900px;">
+        
+        <div class="text-center mb-10">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 pb-2">
+                <i class="fas fa-laptop-code text-blue-500"></i> Tech Competency Analyzer
+            </h1>
+            <p class="text-gray-600 text-lg mt-3">
+                Discover your true engineering level. Our AI Architect will generate a custom technical assessment based on your profile.
+            </p>
+        </div>
+
+        <div class="flex justify-center items-center mb-10 gap-4 text-sm font-bold text-gray-400" id="progress-tracker">
+            <span id="nav-step-1" class="text-indigo-600 border-b-2 border-indigo-600 pb-1">1. Profile</span>
+            <i class="fas fa-chevron-right text-xs"></i>
+            <span id="nav-step-2">2. Assessment</span>
+            <i class="fas fa-chevron-right text-xs"></i>
+            <span id="nav-step-3">3. Results</span>
+        </div>
+
+        <div id="step-1" class="step-container animate-fade-in-up">
+            <h3 class="text-xl font-bold text-gray-800 mb-6 border-b pb-4">Candidate Profile</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div class="input-group">
+                    <label>Full Name</label>
+                    <input type="text" id="prof_name" placeholder="John Doe" required>
+                </div>
+                <div class="input-group">
+                    <label>Email Address</label>
+                    <input type="email" id="prof_email" placeholder="john@example.com" required>
+                </div>
+                <div class="input-group">
+                    <label>Current Organization</label>
+                    <input type="text" id="prof_org" placeholder="Acme Corp" required>
+                </div>
+                <div class="input-group">
+                    <label>Years of Experience</label>
+                    <input type="number" id="prof_yoe" placeholder="e.g. 4" min="0" max="40" required>
+                </div>
+                <div class="input-group">
+                    <label>Primary Domain</label>
+                    <select id="prof_domain">
+                        <option value="Frontend Development">Frontend Development</option>
+                        <option value="Backend Development">Backend Development</option>
+                        <option value="Fullstack Development">Fullstack Development</option>
+                        <option value="DevOps & Cloud">DevOps & Cloud Infrastructure</option>
+                        <option value="Data Engineering">Data Engineering</option>
+                        <option value="Machine Learning / AI">Machine Learning / AI</option>
+                        <option value="Cybersecurity">Cybersecurity</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Core Technology / Stack</label>
+                    <input type="text" id="prof_tech" placeholder="e.g. React, Node.js, Python, AWS" required>
+                </div>
+            </div>
+
+            <button onclick="generateQuestions()" id="btn-generate" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-xl transition-all shadow-md flex justify-center items-center gap-2 text-lg">
+                <span>Generate Assessment Questions</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            <p id="error-1" class="text-red-500 font-medium mt-4 text-center hidden"></p>
+        </div>
+
+        <div id="step-2" class="step-container hidden">
+            <div class="bg-indigo-50 border border-indigo-100 rounded-lg p-4 mb-8 flex items-start gap-4">
+                <div class="bg-indigo-600 text-white rounded-full w-10 h-10 flex items-center justify-center flex-shrink-0"><i class="fas fa-robot"></i></div>
+                <div>
+                    <h4 class="font-bold text-indigo-900">The Architect is ready.</h4>
+                    <p class="text-sm text-indigo-700 mt-1">Answer the following scenario-based questions to the best of your ability. Depth of technical reasoning matters more than textbook definitions.</p>
+                </div>
+            </div>
+
+            <div id="questions-container" class="space-y-8 mb-8">
+                </div>
+
+            <button onclick="evaluateAnswers()" id="btn-evaluate" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl transition-all shadow-md flex justify-center items-center gap-2 text-lg">
+                <span>Submit for Evaluation</span>
+                <i class="fas fa-check-circle"></i>
+            </button>
+            <p id="error-2" class="text-red-500 font-medium mt-4 text-center hidden"></p>
+        </div>
+
+        <div id="step-3" class="step-container hidden">
+            <div class="text-center mb-8 pb-8 border-b border-gray-100">
+                <p class="text-gray-500 font-bold uppercase tracking-widest text-sm mb-4">Assessed Competency Level</p>
+                <div id="result-badge" class="inline-block px-8 py-3 rounded-full text-4xl font-black shadow-sm border border-opacity-20 mb-2">
+                    </div>
+            </div>
+
+            <div class="prose max-w-none text-left">
+                <div id="result-analysis" class="text-gray-700 leading-relaxed">
+                    </div>
+            </div>
+
+            <div class="mt-10 pt-8 border-t border-gray-100 text-center">
+                <button onclick="location.reload()" class="text-indigo-600 font-bold hover:underline"><i class="fas fa-redo"></i> Assess Another Candidate</button>
+            </div>
+        </div>
+
+    </main>
+
+    <div id="loading-overlay" class="fixed inset-0 bg-gray-900 bg-opacity-70 z-50 hidden flex flex-col items-center justify-center text-white backdrop-blur-sm">
+        <svg class="animate-spin h-12 w-12 text-indigo-400 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <h2 id="loading-text" class="text-xl font-bold">Connecting to Architect...</h2>
+    </div>
+
+    <script>
+        // 🔴🔴🔴 REPLACE WITH YOUR ACTUAL WORKER URL
+        const API_BASE_URL = "https://competency-api.abhijit-cloudtech.workers.dev";
+        
+        // State Management
+        let appState = {
+            profile: {},
+            questions: []
+        };
+
+        // --- STEP 1: Generate Questions ---
+        async function generateQuestions() {
+            const errorEl = document.getElementById('error-1');
+            errorEl.classList.add('hidden');
+
+            // Collect Profile Data
+            appState.profile = {
+                name: document.getElementById('prof_name').value.trim(),
+                email: document.getElementById('prof_email').value.trim(),
+                org: document.getElementById('prof_org').value.trim(),
+                yoe: document.getElementById('prof_yoe').value.trim(),
+                domain: document.getElementById('prof_domain').value,
+                technology: document.getElementById('prof_tech').value.trim()
+            };
+
+            // Basic Validation
+            if (!appState.profile.name || !appState.profile.email || !appState.profile.yoe || !appState.profile.technology) {
+                errorEl.innerText = "Please fill out all required fields.";
+                errorEl.classList.remove('hidden');
+                return;
+            }
+
+            showLoading("Analyzing profile and generating questions...");
+
+            try {
+                const response = await fetch(API_BASE_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: "generate", profile: appState.profile })
+                });
+
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || "Failed to generate assessment.");
+
+                appState.questions = data.questions;
+                renderQuestionsUI();
+                
+                // Transition UI
+                document.getElementById('step-1').classList.add('hidden');
+                document.getElementById('step-2').classList.remove('hidden');
+                updateNav(2);
+
+            } catch (error) {
+                errorEl.innerText = error.message;
+                errorEl.classList.remove('hidden');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // --- Render the Dynamic Textareas ---
+        function renderQuestionsUI() {
+            const container = document.getElementById('questions-container');
+            container.innerHTML = ''; // Clear previous
+
+            appState.questions.forEach((q, index) => {
+                container.innerHTML += `
+                    <div class="input-group">
+                        <label class="text-gray-800 text-lg mb-3">
+                            <span class="text-indigo-500 mr-2">Q${index + 1}.</span> ${q}
+                        </label>
+                        <textarea id="answer-${index}" rows="4" placeholder="Draft your technical reasoning here..." class="resize-y" required></textarea>
+                    </div>
+                `;
+            });
+        }
+
+        // --- STEP 2: Evaluate Answers ---
+        async function evaluateAnswers() {
+            const errorEl = document.getElementById('error-2');
+            errorEl.classList.add('hidden');
+
+            // Collect Answers
+            let answers = [];
+            let allAnswered = true;
+            for (let i = 0; i < appState.questions.length; i++) {
+                const ans = document.getElementById(`answer-${i}`).value.trim();
+                if (!ans) allAnswered = false;
+                answers.push(ans);
+            }
+
+            if (!allAnswered) {
+                errorEl.innerText = "Please provide an answer for every question to receive an accurate assessment.";
+                errorEl.classList.remove('hidden');
+                return;
+            }
+
+            showLoading("The Architect is grading your responses...");
+
+            try {
+                const response = await fetch(API_BASE_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        action: "evaluate", 
+                        profile: appState.profile,
+                        questions: appState.questions,
+                        answers: answers
+                    })
+                });
+
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || "Failed to evaluate assessment.");
+
+                renderResultsUI(data.level, data.analysis);
+                
+                // Transition UI
+                document.getElementById('step-2').classList.add('hidden');
+                document.getElementById('step-3').classList.remove('hidden');
+                updateNav(3);
+
+            } catch (error) {
+                errorEl.innerText = error.message;
+                errorEl.classList.remove('hidden');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // --- Render Final Report ---
+        function renderResultsUI(level, analysisHtml) {
+            const badgeEl = document.getElementById('result-badge');
+            
+            // Clean the level string just in case
+            const cleanLevel = level.replace(/[^a-zA-Z]/g, '').toLowerCase();
+            
+            // Apply correct styling based on the AI's grading word
+            badgeEl.className = "inline-block px-8 py-3 rounded-full text-4xl font-black shadow-sm border border-opacity-20 mb-2 ";
+            if (cleanLevel.includes('novice')) badgeEl.classList.add('badge-novice', 'border-sky-300');
+            else if (cleanLevel.includes('competent')) badgeEl.classList.add('badge-competent', 'border-green-300');
+            else if (cleanLevel.includes('proficient')) badgeEl.classList.add('badge-proficient', 'border-purple-300');
+            else if (cleanLevel.includes('expert')) badgeEl.classList.add('badge-expert', 'border-orange-300');
+            else badgeEl.classList.add('bg-gray-200', 'text-gray-700', 'border-gray-300'); // Fallback
+
+            badgeEl.innerText = level;
+
+            // Inject the styled HTML response from Llama-3
+            const styledAnalysis = analysisHtml
+                .replace(/<h3>/g, '<h3 class="text-xl font-bold text-gray-800 mt-8 mb-4 border-b pb-2">')
+                .replace(/<p>/g, '<p class="text-gray-700 mb-4 leading-relaxed text-lg">');
+            
+            document.getElementById('result-analysis').innerHTML = styledAnalysis;
+        }
+
+        // --- Helpers ---
+        function showLoading(text) {
+            document.getElementById('loading-text').innerText = text;
+            document.getElementById('loading-overlay').classList.remove('hidden');
+        }
+
+        function hideLoading() {
+            document.getElementById('loading-overlay').classList.add('hidden');
+        }
+
+        function updateNav(step) {
+            const n1 = document.getElementById('nav-step-1');
+            const n2 = document.getElementById('nav-step-2');
+            const n3 = document.getElementById('nav-step-3');
+            
+            n1.className = step === 1 ? "text-indigo-600 border-b-2 border-indigo-600 pb-1" : "text-gray-400";
+            n2.className = step === 2 ? "text-indigo-600 border-b-2 border-indigo-600 pb-1" : "text-gray-400";
+            n3.className = step === 3 ? "text-indigo-600 border-b-2 border-indigo-600 pb-1" : "text-gray-400";
+        }
+    </script>
+</body>
+</html>
