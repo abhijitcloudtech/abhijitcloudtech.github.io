@@ -120,7 +120,7 @@
             </div>
 
             <div class="card">
-                <form action="https://formspree.io/f/xreodqwe" method="POST">
+                <form id="contactForm">
                     
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                         <div class="form-group">
@@ -148,10 +148,18 @@
                         <textarea name="message" class="form-control" placeholder="How can I help you?" required></textarea>
                     </div>
 
-                    <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 10px; padding: 16px;">
+                    <button type="submit" id="submitBtn" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 10px; padding: 16px;">
                         Send Message <i class="fas fa-paper-plane"></i>
                     </button>
                 </form>
+
+                <div id="aiResponseBox" style="display: none; padding: 25px; background: #f8fafc; border-radius: 8px; border-left: 4px solid var(--primary); margin-top: 10px;">
+                    <h3 style="margin-bottom: 15px; color: var(--primary);"><i class="fas fa-robot"></i> Initial Analysis Complete</h3>
+                    <p id="aiReplyText" style="line-height: 1.7; color: var(--text-main); font-size: 0.95rem;"></p>
+                    <p style="margin-top: 15px; font-size: 0.85rem; color: var(--text-muted);">
+                        <i class="fas fa-check-circle" style="color: #10b981;"></i> AJ has been notified and will reply to your email shortly.
+                    </p>
+                </div>
             </div>
 
         </section>
@@ -164,5 +172,57 @@
     </footer>
 
     <script src="js/script.js"></script>
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', async (e) => {
+            e.preventDefault(); 
+            
+            const form = e.target;
+            const btn = document.getElementById('submitBtn');
+            const responseBox = document.getElementById('aiResponseBox');
+            const replyText = document.getElementById('aiReplyText');
+            
+            const formData = {
+                name: form.name.value,
+                email: form.email.value,
+                inquiry_type: form.inquiry_type.value,
+                message: form.message.value
+            };
+            
+            btn.innerHTML = 'Analyzing & Sending... <i class="fas fa-spinner fa-spin"></i>';
+            btn.disabled = true;
+            btn.style.opacity = '0.7';
+            
+            try {
+                // UPDATE THIS URL TO YOUR ACTUAL CLOUDFLARE WORKER
+                const WORKER_URL = 'https://contact-api-worker.abhijit-cloudtech.workers.dev';
+                
+                const response = await fetch(WORKER_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    form.style.display = 'none';
+                    replyText.innerText = data.reply;
+                    responseBox.style.display = 'block';
+                } else {
+                    alert("Error: " + data.error);
+                    resetButton();
+                }
+            } catch (err) {
+                alert("Failed to send message. Please check your connection.");
+                resetButton();
+            }
+
+            function resetButton() {
+                btn.innerHTML = 'Send Message <i class="fas fa-paper-plane"></i>';
+                btn.disabled = false;
+                btn.style.opacity = '1';
+            }
+        });
+    </script>
 </body>
 </html>
