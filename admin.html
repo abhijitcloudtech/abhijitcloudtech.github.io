@@ -102,6 +102,10 @@
                     <div class="stat-value" id="stat-astro" style="color: #8b5cf6;">0</div>
                     <div class="stat-label">Astro Matches</div>
                 </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-assessments" style="color: #10b981;">0</div>
+                    <div class="stat-label">Total Assessments</div>
+                </div>
             </div>
 
             <div class="dashboard-main-grid">
@@ -173,7 +177,8 @@
                 document.getElementById('stat-roasts').innerText = data.metrics.totalRoasts || 0;
                 document.getElementById('stat-shares').innerText = data.metrics.totalShares || 0;
                 document.getElementById('stat-astro').innerText = data.metrics.totalAstroMatches || 0;
-
+                // NEW: Populate Competency Assessments
+                document.getElementById('stat-assessments').innerText = data.metrics.totalAssessments || 0;
                 // Populate User Table
                 const userTableBody = document.getElementById('userTableBody');
                 if (data.users && data.users.length > 0) {
