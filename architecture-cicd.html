@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Architecture: CI/CD Content Engine | AJ CloudTech</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { 
+            corePlugins: { preflight: false },
+            theme: { extend: { colors: { gray: { 900: '#111827', 800: '#1f2937', 700: '#374151' } } } }
+        }
+    </script>
+    <style>
+        .gradient-text { background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .feature-card { border: 1px solid #e2e8f0; transition: all 0.3s ease; }
+        .feature-card:hover { border-color: #93c5fd; box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.1); transform: translateY(-3px); }
+        
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans antialiased flex flex-col min-h-screen">
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">AJ <span class="highlight">CloudTech</span></a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/tools.html">Tools</a></li>
+                <li><a href="/blog.html">Blog</a></li>
+                <li><a href="/youtube.html">YouTube</a></li>
+                <li><a href="/projects.html" class="active">Projects</a></li>
+                <li><a href="/contact.html">Contact</a></li>
+                <li><a href="/admin.html" class="admin-btn"><i class="fas fa-lock"></i> Admin</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="flex-grow pt-16 pb-20">
+        
+        <div class="max-w-6xl mx-auto px-6">
+            
+            <div class="mb-8 animate-fade-in-up">
+                <a href="/projects.html" class="text-gray-500 hover:text-cyan-600 font-semibold text-sm flex items-center gap-2 mb-6 transition-colors">
+                    <i class="fas fa-arrow-left"></i> Back to Portfolio
+                </a>
+                <div class="inline-block bg-cyan-100 text-cyan-800 font-bold px-3 py-1 rounded-full text-xs uppercase tracking-wide mb-4 border border-cyan-200">
+                    Architecture Deep Dive
+                </div>
+                <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900 mb-4">
+                    CI/CD <span class="gradient-text">Content Engine</span>
+                </h1>
+                <p class="text-xl text-gray-600 max-w-3xl leading-relaxed">
+                    A zero-touch, serverless deployment pipeline that transforms raw data into SEO-optimized static content hosted entirely on the edge.
+                </p>
+            </div>
+
+            <div class="w-full bg-white rounded-2xl p-4 shadow-2xl border border-gray-200 mb-16 animate-fade-in-up delay-100 relative overflow-hidden group">
+                <div class="absolute inset-0 bg-gradient-to-tr from-cyan-500/10 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                <img src="/img/cicd-architecture.jpg" alt="CI/CD Content Engine Architecture Blueprint" class="w-full h-auto rounded-xl object-cover border border-gray-100">
+            </div>
+
+            <div class="mb-20 animate-fade-in-up delay-200">
+                <h2 class="text-2xl font-bold text-gray-900 mb-8 border-b pb-3">Technical Workflow</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    
+                    <div class="bg-white p-8 rounded-xl feature-card">
+                        <div class="w-12 h-12 bg-gray-100 text-gray-800 rounded-lg flex items-center justify-center text-xl mb-5">
+                            <i class="fab fa-github"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">1. Trigger & Ingestion</h3>
+                        <p class="text-gray-600 leading-relaxed text-sm">
+                            The pipeline initiates automatically upon a commit or scheduled cron job. Raw content (markdown, JSON, or external API data) is ingested into the repository, acting as the single source of truth.
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-8 rounded-xl feature-card">
+                        <div class="w-12 h-12 bg-cyan-100 text-cyan-600 rounded-lg flex items-center justify-center text-xl mb-5">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">2. Automated Assembly</h3>
+                        <p class="text-gray-600 leading-relaxed text-sm">
+                            GitHub Actions spins up an ephemeral runner. It executes formatting scripts, compiles static assets, and processes HTML templates to generate highly optimized, lightweight static pages.
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-8 rounded-xl feature-card">
+                        <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center text-xl mb-5">
+                            <i class="fas fa-server"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">3. Edge Deployment</h3>
+                        <p class="text-gray-600 leading-relaxed text-sm">
+                            The compiled site is instantly pushed to GitHub Pages (or Cloudflare Pages). Because there is no backend database to query at runtime, the content serves globally with sub-50ms latency.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="bg-gray-900 rounded-3xl p-10 md:p-14 text-white shadow-xl animate-fade-in-up delay-200 relative overflow-hidden">
+                <div class="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 rounded-full bg-cyan-500 opacity-10 blur-3xl"></div>
+                <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-64 h-64 rounded-full bg-blue-500 opacity-10 blur-3xl"></div>
+                
+                <h2 class="text-3xl font-bold mb-10 relative z-10">Business Impact & ROI</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 relative z-10">
+                    <div class="flex gap-4">
+                        <i class="fas fa-check-circle text-cyan-400 text-2xl mt-1"></i>
+                        <div>
+                            <h4 class="font-bold text-lg mb-2">Zero Hosting Costs</h4>
+                            <p class="text-gray-400 text-sm leading-relaxed">By leveraging static site generation and GitHub Pages, we eliminate the need for costly EC2 instances, load balancers, and database clusters. Infinite scale at zero monthly cost.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4">
+                        <i class="fas fa-check-circle text-cyan-400 text-2xl mt-1"></i>
+                        <div>
+                            <h4 class="font-bold text-lg mb-2">Unbeatable Core Web Vitals</h4>
+                            <p class="text-gray-400 text-sm leading-relaxed">Static HTML inherently bypasses database queries. This guarantees perfect Google Lighthouse scores, drastically improving SEO rankings and user retention.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4">
+                        <i class="fas fa-check-circle text-cyan-400 text-2xl mt-1"></i>
+                        <div>
+                            <h4 class="font-bold text-lg mb-2">Impenetrable Security</h4>
+                            <p class="text-gray-400 text-sm leading-relaxed">Without an active database or dynamic backend server (like WordPress or PHP), the attack surface is completely eliminated. No SQL injections, no plugin vulnerabilities.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4">
+                        <i class="fas fa-check-circle text-cyan-400 text-2xl mt-1"></i>
+                        <div>
+                            <h4 class="font-bold text-lg mb-2">Zero-Touch Operations</h4>
+                            <p class="text-gray-400 text-sm leading-relaxed">Marketing teams focus purely on drafting content. The moment they hit save, the DevOps pipeline handles the testing, compilation, and global deployment entirely in the background.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-12 pt-8 border-t border-gray-800 text-center relative z-10">
+                    <p class="text-gray-300 mb-6">Need to implement a high-speed, zero-cost content engine for your enterprise?</p>
+                    <a href="/contact.html" class="inline-block bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:from-cyan-400 hover:to-blue-500 transition-colors shadow-lg">
+                        Discuss Your Infrastructure
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>© 2026 AJ CloudTech. Elevating Businesses with Edge AI.</p>
+        </div>
+    </footer>
+
+    <script src="/js/script.js"></script>
+</body>
+</html>
