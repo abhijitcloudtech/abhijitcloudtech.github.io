@@ -1,3 +1,4 @@
 baseURL = "https://ajcloudtech.in/"
 languageCode = "en-us"
 title = "AJ CloudTech"
+uglyURLs = true
