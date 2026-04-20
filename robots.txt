@@ -1,4 +1,21 @@
-User-agent: *
-Allow: /
+# ==========================================
+# AJ CloudTech - Search Engine Directives
+# ==========================================
 
+User-agent: *
+
+# --- ALLOW PUBLIC PATHS ---
+# Explicitly allowing core assets to ensure flawless indexing of the portfolio.
+Allow: /css/
+Allow: /js/
+Allow: /img/
+
+# --- DISALLOW SENSITIVE PATHS ---
+# Strictly block all crawlers from accessing the admin portal and backend logic.
+Disallow: /admin.html
+Disallow: /*?password=*
+Disallow: /*?secret=*
+
+# --- SITEMAP LOCATION ---
+# Point crawlers directly to the roadmap of the site.
 Sitemap: https://ajcloudtech.in/sitemap.xml
