@@ -3,13 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projects | AJ CloudTech</title>
+    <title>AI Portfolio & Consulting | AJ CloudTech</title>
+    
     <link rel="canonical" href="https://ajcloudtech.in/projects.html">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/style.css">
+    
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { 
+            corePlugins: { preflight: false },
+            theme: { extend: { colors: { gray: { 900: '#111827', 800: '#1f2937', 700: '#374151' } } } }
+        }
+    </script>
+    <style>
+        .gradient-text { background: linear-gradient(135deg, #4f46e5 0%, #9333ea 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .project-card { transition: all 0.3s ease; border: 1px solid #e2e8f0; }
+        .project-card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); border-color: #cbd5e1; }
+        .tag { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 4px 10px; border-radius: 9999px; }
+        
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+    </style>
 </head>
-<body>
+<body class="bg-gray-50 text-gray-900 font-sans antialiased flex flex-col min-h-screen">
 
     <nav class="navbar">
         <div class="nav-container">
@@ -23,55 +44,113 @@
                 <li><a href="/contact.html">Contact</a></li>
                 <li><a href="/admin.html" class="admin-btn"><i class="fas fa-lock"></i> Admin</a></li>
             </ul>
-            <div class="hamburger"><i class="fas fa-bars"></i></div>
         </div>
     </nav>
 
-    <header class="hero">
-        <div class="hero-content">
-            <span class="badge">Local Architecture</span>
-            <h1>Architecture & <span class="gradient-text">Pipelines</span></h1>
-            <p>Deep dives into my private infrastructure, video processing engines, and local AI servers.</p>
+    <main class="flex-grow pt-20 pb-20">
+        
+        <div class="max-w-5xl mx-auto px-6 text-center mb-20 animate-fade-in-up">
+            <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight text-gray-900 mb-6">
+                Enterprise AI <br /> <span class="gradient-text">Business Transformation</span>
+            </h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                We design, build, and deploy serverless AI solutions that automate workflows, generate qualified leads, and create scalable SaaS revenue streams. View our commercial architectures below.
+            </p>
+            <div class="mt-10 flex justify-center gap-4">
+                <a href="/contact.html" class="bg-gray-900 hover:bg-gray-800 text-white font-bold py-3 px-8 rounded-lg transition-colors shadow-lg">Book a Consultation</a>
+                <a href="#portfolio" class="bg-white hover:bg-gray-50 text-gray-900 border border-gray-200 font-bold py-3 px-8 rounded-lg transition-colors shadow-sm">View Case Studies</a>
+            </div>
         </div>
-    </header>
 
-    <main class="container">
-        <section class="grid" style="margin-top: 40px;">
-            <div class="card">
-                <div class="card-icon"><i class="fas fa-video"></i></div>
-                <h3>AI Video Engine</h3>
-                <p>Generates daily tasks using LLMs, writes scripts, and compiles simple videos using FFmpeg.</p>
-                <span style="font-size: 0.8rem; background: #e2e8f0; padding: 2px 8px; border-radius: 4px; margin-bottom: 10px; display: inline-block;">Local Edge Server</span>
+        <div id="portfolio" class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-10">
+            
+            <div class="bg-white rounded-2xl overflow-hidden project-card opacity-0 animate-fade-in-up delay-100">
+                <div class="h-48 bg-gradient-to-br from-blue-500 to-indigo-600 p-8 flex flex-col justify-end">
+                    <span class="tag bg-white/20 text-white w-max mb-3 backdrop-blur-sm">B2B HR Automation</span>
+                    <h2 class="text-3xl font-bold text-white">AI Competency Analyzer</h2>
+                </div>
+                <div class="p-8">
+                    <p class="text-gray-600 mb-6 leading-relaxed">An enterprise-grade screening platform. It uses LLMs to dynamically generate role-specific technical assessments, automatically grade candidates, and provide actionable competency analytics to HR teams.</p>
+                    <div class="mb-6 flex flex-wrap gap-2">
+                        <span class="text-xs font-semibold bg-gray-100 text-gray-600 px-3 py-1 rounded-full">Cloudflare Workers</span>
+                        <span class="text-xs font-semibold bg-gray-100 text-gray-600 px-3 py-1 rounded-full">Llama-3</span>
+                        <span class="text-xs font-semibold bg-gray-100 text-gray-600 px-3 py-1 rounded-full">D1 Database</span>
+                    </div>
+                    <div class="border-t border-gray-100 pt-4 mt-auto">
+                        <a href="/tools/competency-analyzer.html" class="text-indigo-600 font-bold hover:text-indigo-800 flex items-center gap-2">View Live Demo <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
             </div>
 
-            <div class="card">
-                <div class="card-icon"><i class="fas fa-film"></i></div>
-                <h3>Pixar-Style Video Generator</h3>
-                <p>Merges short clips, applies watermarks, and syncs AI-separated audio tracks seamlessly.</p>
-                <span style="font-size: 0.8rem; background: #e2e8f0; padding: 2px 8px; border-radius: 4px; margin-bottom: 10px; display: inline-block;">Local Edge Server</span>
+            <div class="bg-white rounded-2xl overflow-hidden project-card opacity-0 animate-fade-in-up delay-200">
+                <div class="h-48 bg-gradient-to-br from-purple-500 to-pink-500 p-8 flex flex-col justify-end">
+                    <span class="tag bg-white/20 text-white w-max mb-3 backdrop-blur-sm">SaaS Monetization Architecture</span>
+                    <h2 class="text-3xl font-bold text-white">Premium Astro Match API</h2>
+                </div>
+                <div class="p-8">
+                    <p class="text-gray-600 mb-6 leading-relaxed">A fully monetized Freemium SaaS architecture. Features intelligent API gateway routing, tracking free user limits, and dynamically switching to premium computational math engines based on active subscription tiers.</p>
+                    <div class="mb-6 flex flex-wrap gap-2">
+                        <span class="text-xs font-semibold bg-gray-100 text-gray-600 px-3 py-1 rounded-full">API Gateway</span>
+                        <span class="text-xs font-semibold bg-gray-100 text-gray-600 px-3 py-1 rounded-full">Rate Limiting</span>
+                        <span class="text-xs font-semibold bg-gray-100 text-gray-600 px-3 py-1 rounded-full">3rd Party API Merging</span>
+                    </div>
+                    <div class="border-t border-gray-100 pt-4 mt-auto">
+                        <a href="/tools/astro-match.html" class="text-pink-600 font-bold hover:text-pink-800 flex items-center gap-2">View Live Demo <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
             </div>
 
-            <div class="card">
-                <div class="card-icon"><i class="fab fa-youtube"></i></div>
-                <h3>YouTube Studio Automator</h3>
-                <p>Generates full YouTube metadata from raw video files using local LLMs and SQLite storage.</p>
-                <span style="font-size: 0.8rem; background: #e2e8f0; padding: 2px 8px; border-radius: 4px; margin-bottom: 10px; display: inline-block;">Local Edge Server</span>
+            <div class="bg-white rounded-2xl overflow-hidden project-card opacity-0 animate-fade-in-up delay-100">
+                <div class="h-48 bg-gradient-to-br from-orange-400 to-red-500 p-8 flex flex-col justify-end">
+                    <span class="tag bg-white/20 text-white w-max mb-3 backdrop-blur-sm">Viral Marketing / Lead Gen</span>
+                    <h2 class="text-3xl font-bold text-white">The AI CV Roaster</h2>
+                </div>
+                <div class="p-8">
+                    <p class="text-gray-600 mb-6 leading-relaxed">A high-engagement B2C marketing tool designed for virality. It processes unstructured data (resumes) in milliseconds at the edge, applying aggressive persona-driven prompting to encourage social sharing and lead capture.</p>
+                    <div class="mb-6 flex flex-wrap gap-2">
+                        <span class="text-xs font-semibold bg-gray-100 text-gray-600 px-3 py-1 rounded-full">Persona Engineering</span>
+                        <span class="text-xs font-semibold bg-gray-100 text-gray-600 px-3 py-1 rounded-full">Growth Hacking</span>
+                        <span class="text-xs font-semibold bg-gray-100 text-gray-600 px-3 py-1 rounded-full">Edge Compute</span>
+                    </div>
+                    <div class="border-t border-gray-100 pt-4 mt-auto">
+                        <a href="/tools/cv-roaster.html" class="text-red-500 font-bold hover:text-red-700 flex items-center gap-2">View Live Demo <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
             </div>
-             
-             <div class="card">
-                <div class="card-icon"><i class="fas fa-server"></i></div>
-                <h3>Tailscale FileHub</h3>
-                <p>Secure, private file storage system handling uploads and database records for all local tools.</p>
-                <span style="font-size: 0.8rem; background: #e2e8f0; padding: 2px 8px; border-radius: 4px; margin-bottom: 10px; display: inline-block;">Local Edge Server</span>
+
+            <div class="bg-white rounded-2xl overflow-hidden project-card opacity-0 animate-fade-in-up delay-200">
+                <div class="h-48 bg-gradient-to-br from-teal-400 to-emerald-500 p-8 flex flex-col justify-end">
+                    <span class="tag bg-white/20 text-white w-max mb-3 backdrop-blur-sm">AI Content Generation</span>
+                    <h2 class="text-3xl font-bold text-white">Dad's Whypedia</h2>
+                </div>
+                <div class="p-8">
+                    <p class="text-gray-600 mb-6 leading-relaxed">A scalable content engine that transforms complex queries into accessible, engaging narratives. Demonstrates the ability to strictly control AI hallucination and enforce specific tone, style, and formatting constraints.</p>
+                    <div class="mb-6 flex flex-wrap gap-2">
+                        <span class="text-xs font-semibold bg-gray-100 text-gray-600 px-3 py-1 rounded-full">Prompt Constraint</span>
+                        <span class="text-xs font-semibold bg-gray-100 text-gray-600 px-3 py-1 rounded-full">Serverless Automation</span>
+                    </div>
+                    <div class="border-t border-gray-100 pt-4 mt-auto">
+                        <a href="/tools/dads-whypedia.html" class="text-teal-600 font-bold hover:text-teal-800 flex items-center gap-2">View Live Demo <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
             </div>
-        </section>
+
+        </div>
+        
+        <div class="max-w-4xl mx-auto px-6 mt-20 text-center bg-gray-900 rounded-3xl p-12 shadow-2xl">
+            <h2 class="text-3xl font-bold text-white mb-4">Ready to build your AI infrastructure?</h2>
+            <p class="text-gray-400 mb-8 max-w-2xl mx-auto">Stop paying for bloated servers. Let's discuss how we can transition your business logic to secure, scalable Cloudflare Edge AI.</p>
+            <a href="/contact.html" class="inline-block bg-white text-gray-900 font-bold py-3 px-8 rounded-lg hover:bg-gray-100 transition-colors shadow-lg">Start the Conversation</a>
+        </div>
+
     </main>
 
     <footer>
         <div class="footer-content">
-            <p>© 2026 AJ CloudTech.</p>
+            <p>© 2026 AJ CloudTech. Elevating Businesses with Edge AI.</p>
         </div>
     </footer>
-    <script src="js/script.js"></script>
+
+    <script src="/js/script.js"></script>
 </body>
 </html>
