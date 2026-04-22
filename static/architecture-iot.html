@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Battery Manager Architecture | AJ CloudTech</title>
+    
+    <link rel="canonical" href="https://ajcloudtech.in/architecture-iot.html">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { 
+            corePlugins: { preflight: false },
+            theme: { extend: { colors: { gray: { 900: '#111827', 800: '#1f2937', 700: '#374151' } } } }
+        }
+    </script>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+    </script>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans antialiased flex flex-col min-h-screen">
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">AJ <span class="highlight">CloudTech</span></a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/tools.html">Tools</a></li>
+                <li><a href="/blog/">Blog</a></li>
+                <li><a href="/youtube.html">YouTube</a></li>
+                <li><a href="/projects.html">Projects</a></li>
+                <li><a href="/contact.html">Contact</a></li>
+                <li><a href="/admin.html" class="admin-btn"><i class="fas fa-lock"></i> Admin</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="flex-grow pt-24 pb-20 px-6">
+        <div class="max-w-4xl mx-auto">
+            
+            <a href="/projects.html" class="text-amber-600 font-semibold hover:text-amber-800 mb-8 inline-block"><i class="fas fa-arrow-left mr-2"></i> Back to Projects</a>
+            
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900 mb-4">Local-First Smart Battery Manager</h1>
+            <p class="text-xl text-gray-600 mb-10">An automated, hardware-level laptop charging system built on zero-trust networking.</p>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 md:p-12 mb-10">
+                <h3 class="text-2xl font-bold mb-4 border-b pb-2">The Architecture</h3>
+                
+                <div class="mermaid flex justify-center my-8 bg-gray-50 p-6 rounded-lg border border-gray-100">
+                    graph TD
+                        subgraph Windows Host
+                            A[Background Agent<br>psutil battery monitor]
+                        end
+                        
+                        subgraph Tailscale Network
+                            B((Secure VPN Bridge))
+                            F[Remote Mobile Device<br>Dashboard Access]
+                        end
+                        
+                        subgraph WSL Ubuntu
+                            C[Flask API & Toolhub]
+                            E[(SQLite Logs)]
+                        end
+                        
+                        subgraph Local IoT Hardware
+                            D[Solimo Smart Plug<br>Tuya Local Key]
+                        end
+
+                        A -- Sends JSON via localhost --> C
+                        C -- Writes events --> E
+                        C -- Executes local command --> D
+                        F -- Port 5000 via Tailscale --> B
+                        B -- Routes traffic --> C
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
+                    <div>
+                        <h3 class="text-xl font-bold mb-3 text-gray-900"><i class="fas fa-exclamation-triangle text-amber-500 mr-2"></i> The Problem</h3>
+                        <p class="text-gray-600 leading-relaxed">Continuous AC power degrades laptop battery health over time. Relying on cloud-based smart home apps for automation introduces unnecessary latency, privacy concerns, and security risks by relying on external servers to dictate internal hardware states.</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold mb-3 text-gray-900"><i class="fas fa-lightbulb text-amber-500 mr-2"></i> The Solution</h3>
+                        <p class="text-gray-600 leading-relaxed">A fully local, zero-latency system bridging a Windows host with a virtualized Ubuntu server. Utilizing local Tuya IoT keys, the system physically toggles AC power based on precise battery thresholds (20% to 100%), completely bypassing the cloud.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gray-900 rounded-2xl text-white p-8 md:p-12">
+                <h3 class="text-2xl font-bold mb-6">System Workflow & Features</h3>
+                <ul class="space-y-6">
+                    <li class="flex items-start">
+                        <div class="bg-amber-500 rounded-full p-2 mt-1 mr-4"><i class="fas fa-laptop-code text-white"></i></div>
+                        <div>
+                            <strong class="text-lg block">The Reporter (Windows Agent)</strong>
+                            <span class="text-gray-400 text-sm">A lightweight Python background process monitors physical battery sensors invisibly, sending state data to the local server.</span>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <div class="bg-amber-500 rounded-full p-2 mt-1 mr-4"><i class="fas fa-server text-white"></i></div>
+                        <div>
+                            <strong class="text-lg block">The Brain (WSL Ubuntu API)</strong>
+                            <span class="text-gray-400 text-sm">A Flask endpoint receives the telemetry, manages state logic, and securely logs charging durations into an isolated SQLite database to maintain normalized architectural standards.</span>
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <div class="bg-amber-500 rounded-full p-2 mt-1 mr-4"><i class="fas fa-network-wired text-white"></i></div>
+                        <div>
+                            <strong class="text-lg block">Zero-Trust Routing (Tailscale)</strong>
+                            <span class="text-gray-400 text-sm">Asymmetric network bridging using Windows port proxies routes host traffic seamlessly into the WSL environment, allowing global dashboard access via Tailscale without open ports.</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content text-center py-6 text-gray-500">
+            <p>© 2026 AJ CloudTech. Elevating Businesses with Edge AI.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
