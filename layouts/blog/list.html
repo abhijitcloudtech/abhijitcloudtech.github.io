@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog | AJ CloudTech</title>
-    <link rel="canonical" href="https://ajcloudtech.in/blog.html">
+    <link rel="canonical" href="https://ajcloudtech.in/blog/">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/css/style.css">
@@ -29,7 +29,7 @@
             <ul class="nav-links">
                 <li><a href="/">Home</a></li>
                 <li><a href="/tools.html">Tools</a></li>
-                <li><a href="/blog.html" class="active">Blog</a></li>
+                <li><a href="/blog/" class="active">Blog</a></li>
                 <li><a href="/youtube.html">YouTube</a></li>
                 <li><a href="/projects.html">Projects</a></li>
                 <li><a href="/contact.html">Contact</a></li>
@@ -47,19 +47,14 @@
     </header>
 
     <main class="container" style="max-width: 800px; margin-top: 40px;">
+        {{ range .Pages }}
         <article class="blog-card">
-            <span class="blog-date">April 8, 2026</span>
-            <h2 class="blog-title">How I Automate My Daily Blog Using AI</h2>
-            <p style="color: var(--text-muted); margin-bottom: 20px;">An overview of the Python script that pulls trending topics, summarizes them using Llama-3, and pushes directly to GitHub Pages.</p>
-            <a href="#" class="card-link">Read Full Article →</a>
+            <span class="blog-date">{{ .Date.Format "January 2, 2006" }}</span>
+            <h2 class="blog-title"><a href="{{ .Permalink }}" style="color: inherit; text-decoration: none;">{{ .Title }}</a></h2>
+            <p style="color: var(--text-muted); margin-bottom: 20px;">{{ .Summary }}</p>
+            <a href="{{ .Permalink }}" class="card-link">Read Full Article →</a>
         </article>
-
-        <article class="blog-card">
-            <span class="blog-date">April 7, 2026</span>
-            <h2 class="blog-title">Building a Local FileHub with Tailscale</h2>
-            <p style="color: var(--text-muted); margin-bottom: 20px;">Why I stopped using public clouds for heavy media processing and built a secure edge server.</p>
-            <a href="#" class="card-link">Read Full Article →</a>
-        </article>
+        {{ end }}
     </main>
 
     <script src="/js/script.js"></script>
