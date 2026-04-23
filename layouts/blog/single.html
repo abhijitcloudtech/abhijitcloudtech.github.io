@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .Title }} | AJ CloudTech</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .article-container { 
+            max-width: 800px; 
+            margin: 40px auto; 
+            padding: 40px; 
+            background: white; 
+            border-radius: 12px; 
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02); 
+        }
+        .article-title { font-size: 2.5rem; color: var(--text-main); margin-bottom: 10px; line-height: 1.2; }
+        .article-meta { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
+        .article-content { line-height: 1.8; color: var(--text-main); font-size: 1.1rem; }
+        .article-content h2, .article-content h3 { margin-top: 40px; margin-bottom: 15px; color: var(--text-main); }
+        .article-content p { margin-bottom: 20px; }
+        .article-content ul { margin-bottom: 20px; padding-left: 20px; }
+        .article-content li { margin-bottom: 10px; }
+        .article-content code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
+        .back-link { display: inline-block; margin-top: 40px; text-decoration: none; color: #3b82f6; font-weight: 600; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">AJ <span class="highlight">CloudTech</span></a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/tools.html">Tools</a></li>
+                <li><a href="/blog/" class="active">Blog</a></li>
+                <li><a href="/youtube.html">YouTube</a></li>
+                <li><a href="/projects.html">Projects</a></li>
+                <li><a href="/contact.html">Contact</a></li>
+                <li><a href="/admin.html" class="admin-btn"><i class="fas fa-lock"></i> Admin</a></li>
+            </ul>
+            <div class="hamburger"><i class="fas fa-bars"></i></div>
+        </div>
+    </nav>
+
+    <main class="article-container">
+        <h1 class="article-title">{{ .Title }}</h1>
+        
+        <div class="article-meta">Published on {{ .Date.Format "January 2, 2006" }} | AI Generated</div>
+        
+        <div class="article-content">
+            {{ .Content }}
+        </div>
+        
+        <a href="/blog/" class="back-link">← Back to All Articles</a>
+    </main>
+
+    <script src="/js/script.js"></script>
+</body>
+</html>
