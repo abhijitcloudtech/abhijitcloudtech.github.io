@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .Title }} | AJ CloudTech</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .channel-section { margin-top: 40px; margin-bottom: 40px; }
+        .channel-title { font-size: 2rem; color: var(--text-main); margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .video-card { background: white; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; box-shadow: 0 2px 4px rgba(0,0,0,0.02); transition: transform 0.2s; }
+        .video-card:hover { transform: translateY(-5px); }
+        .video-thumb { width: 100%; height: 180px; object-fit: cover; }
+        .video-info { padding: 15px; }
+        .video-title { font-size: 1.1rem; color: var(--text-main); font-weight: 600; text-decoration: none; line-height: 1.4; display: block;}
+        .video-title:hover { color: #3b82f6; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">AJ <span class="highlight">CloudTech</span></a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/tools.html">Tools</a></li>
+                <li><a href="/blog/">Blog</a></li>
+                <li><a href="/youtube.html" class="active">YouTube</a></li>
+                <li><a href="/projects.html">Projects</a></li>
+                <li><a href="/contact.html">Contact</a></li>
+                <li><a href="/admin.html" class="admin-btn"><i class="fas fa-lock"></i> Admin</a></li>
+            </ul>
+            <div class="hamburger"><i class="fas fa-bars"></i></div>
+        </div>
+    </nav>
+
+    <header class="hero" style="padding: 60px 20px;">
+        <div class="hero-content">
+            <h1>My <span class="gradient-text">Channels</span></h1>
+            <p>AI Animation, Tech Education, and my Spanish Guitar Journey.</p>
+        </div>
+    </header>
+
+    <main class="container" style="max-width: 1000px; margin-top: 20px;">
+        {{ range .Site.Data.youtube }}
+        <section class="channel-section">
+            <h2 class="channel-title">
+                <i class="fab fa-youtube" style="color: #ff0000;"></i> 
+                <a href="{{ .url }}" target="_blank" style="color: inherit; text-decoration: none;">{{ .channel }}</a>
+            </h2>
+            <div class="video-grid">
+                {{ range .videos }}
+                <div class="video-card">
+                    <a href="{{ .link }}" target="_blank">
+                        <img src="{{ .thumbnail }}" alt="Thumbnail" class="video-thumb">
+                    </a>
+                    <div class="video-info">
+                        <a href="{{ .link }}" target="_blank" class="video-title">{{ .title }}</a>
+                    </div>
+                </div>
+                {{ end }}
+            </div>
+        </section>
+        {{ end }}
+    </main>
+
+    <script src="/js/script.js"></script>
+</body>
+</html>

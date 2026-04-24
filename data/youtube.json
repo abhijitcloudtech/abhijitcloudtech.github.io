@@ -1,0 +1,23 @@
+[
+  {
+    "channel": "Dad's Whypedia",
+    "url": "https://youtube.com/@DadsWhypedia",
+    "videos": [
+      {"title": "Sample AI Animation Video", "link": "#", "thumbnail": "https://via.placeholder.com/320x180/0f172a/ffffff?text=Dads+Whypedia+Video"}
+    ]
+  },
+  {
+    "channel": "Quick Travel Facts",
+    "url": "https://youtube.com/@QuickTravelFacts",
+    "videos": [
+      {"title": "Sample Travel Video", "link": "#", "thumbnail": "https://via.placeholder.com/320x180/0f172a/ffffff?text=Travel+Facts+Video"}
+    ]
+  },
+  {
+    "channel": "Open Strings",
+    "url": "https://youtube.com/@OpenStrings",
+    "videos": [
+      {"title": "Sample Guitar Lesson", "link": "#", "thumbnail": "https://via.placeholder.com/320x180/0f172a/ffffff?text=Open+Strings+Video"}
+    ]
+  }
+]
