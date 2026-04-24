@@ -1,23 +1,80 @@
 [
   {
     "channel": "Dad's Whypedia",
-    "url": "https://youtube.com/@DadsWhypedia",
+    "url": "https://www.youtube.com/@DadsWhypedia",
     "videos": [
-      {"title": "Sample AI Animation Video", "link": "#", "thumbnail": "https://via.placeholder.com/320x180/0f172a/ffffff?text=Dads+Whypedia+Video"}
+      {
+        "title": "Bubu the Bear and the Circle of Friends 🐻 | Kids Story on Friendship | Dads Whypedia",
+        "link": "https://www.youtube.com/watch?v=yGKk_vFnmFM",
+        "thumbnail": "https://i.ytimg.com/vi/yGKk_vFnmFM/maxresdefault.jpg"
+      },
+      {
+        "title": "Why Does the MCV Go Down and Electricity Stop? ⚡🔌 | Safety Science | Dads Whypedia",
+        "link": "https://www.youtube.com/watch?v=2IJUdLsdSTQ",
+        "thumbnail": "https://i.ytimg.com/vi/2IJUdLsdSTQ/maxresdefault.jpg"
+      },
+      {
+        "title": "Why Should We Do Potty Every Day? 🚽🙂 | Body Science for Kids | Dads Whypedia",
+        "link": "https://www.youtube.com/watch?v=nvcB-CFTHAE",
+        "thumbnail": "https://i.ytimg.com/vi/nvcB-CFTHAE/maxresdefault.jpg"
+      },
+      {
+        "title": "Why Should We Drink Water? 💧🧒 | Healthy Habits | Dads Whypedia",
+        "link": "https://www.youtube.com/watch?v=UFL6wgFEA50",
+        "thumbnail": "https://i.ytimg.com/vi/UFL6wgFEA50/maxresdefault.jpg"
+      }
     ]
   },
   {
     "channel": "Quick Travel Facts",
-    "url": "https://youtube.com/@QuickTravelFacts",
+    "url": "https://www.youtube.com/@QuickTravelFactsbyAJ",
     "videos": [
-      {"title": "Sample Travel Video", "link": "#", "thumbnail": "https://via.placeholder.com/320x180/0f172a/ffffff?text=Travel+Facts+Video"}
+      {
+        "title": "Howrah District Satsang Utsav 2025 🙏 | Anukul Thakur Utsav | Over 1 Lakh Devotees",
+        "link": "https://www.youtube.com/watch?v=fUDG9DaStS8",
+        "thumbnail": "https://i.ytimg.com/vi/fUDG9DaStS8/maxresdefault.jpg"
+      },
+      {
+        "title": "Fun Time at Avani Mall Game Studio 🎮 | My Son’s Joyful Moments | Family Weekend Vibes",
+        "link": "https://www.youtube.com/watch?v=2hPmmiqfkfQ",
+        "thumbnail": "https://i.ytimg.com/vi/2hPmmiqfkfQ/maxresdefault.jpg"
+      },
+      {
+        "title": "Maa Durga Arati 2025 @ Mansa Manikpir Sangha, Jujersaha 🔥 Divine Puja |Durga Puja Lights & Devotion",
+        "link": "https://www.youtube.com/watch?v=JoS9OyXTxSg",
+        "thumbnail": "https://i.ytimg.com/vi/JoS9OyXTxSg/maxresdefault.jpg"
+      },
+      {
+        "title": "Simplicity & Discipline at Satsang Ashram",
+        "link": "https://www.youtube.com/watch?v=gCD-3zf5rlQ",
+        "thumbnail": "https://i.ytimg.com/vi/gCD-3zf5rlQ/maxresdefault.jpg"
+      }
     ]
   },
   {
     "channel": "Open Strings",
-    "url": "https://youtube.com/@OpenStrings",
+    "url": "https://www.youtube.com/@Openstringsprotools",
     "videos": [
-      {"title": "Sample Guitar Lesson", "link": "#", "thumbnail": "https://via.placeholder.com/320x180/0f172a/ffffff?text=Open+Strings+Video"}
+      {
+        "title": "D Major Scale | 1st & 2nd Octave | Ascending & Descending | Guitar Scale Practice",
+        "link": "https://www.youtube.com/watch?v=moHzdCIuCCI",
+        "thumbnail": "https://i.ytimg.com/vi/moHzdCIuCCI/maxresdefault.jpg"
+      },
+      {
+        "title": "G Major Scale Gallop Practice | 2nd Octave | Guitar Technique Exercise | Open Strings",
+        "link": "https://www.youtube.com/watch?v=iRDDoARgnIY",
+        "thumbnail": "https://i.ytimg.com/vi/iRDDoARgnIY/maxresdefault.jpg"
+      },
+      {
+        "title": "Guitar Practice | G Major Scale Gallop Practice | Technique Exercise | Open Strings",
+        "link": "https://www.youtube.com/watch?v=pVrtz6ulEmM",
+        "thumbnail": "https://i.ytimg.com/vi/pVrtz6ulEmM/maxresdefault.jpg"
+      },
+      {
+        "title": "Guitar Practice | D Major Scale (1st Octave) | Daily Scale Practice | Open Strings",
+        "link": "https://www.youtube.com/watch?v=f78URRqWF70",
+        "thumbnail": "https://i.ytimg.com/vi/f78URRqWF70/maxresdefault.jpg"
+      }
     ]
   }
 ]
